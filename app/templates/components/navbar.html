@@ -1,0 +1,116 @@
+<nav class="navbar navbar-expand-lg custom-navbar fixed-top">
+
+<div class="container-fluid px-4">
+
+    <!-- BRAND (LEFT ONLY LOGO) -->
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url_for('web.dashboard') }}">
+
+        <span class="brand-icon me-2">⚡</span>
+        PricePulse
+
+        <span class="d-none d-md-inline ms-2 brand-sub">
+            Price Intelligence
+        </span>
+
+    </a>
+
+    <!-- TOGGLE -->
+    <button class="navbar-toggler border-0" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- RIGHT SIDE ONLY PROFILE -->
+    <div class="collapse navbar-collapse justify-content-end" id="nav">
+
+        <ul class="navbar-nav align-items-center gap-2">
+
+            {% if current_user.is_authenticated %}
+
+            <!-- NOTIFICATIONS -->
+            <li class="nav-item">
+                <a class="nav-link icon-btn" href="{{ url_for('web.alerts') }}">
+                    🔔
+                </a>
+            </li>
+
+            <!-- PROFILE DROPDOWN -->
+            <li class="nav-item dropdown">
+
+                <a class="nav-link dropdown-toggle profile-btn d-flex align-items-center"
+                   data-bs-toggle="dropdown">
+
+                    <div class="avatar">
+                        {{ current_user.username[0].upper() }}
+                    </div>
+
+                    <span class="ms-2 d-none d-md-inline">
+                        {{ current_user.username }}
+                    </span>
+
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 profile-menu">
+
+                    <li class="dropdown-header">
+                        <strong>{{ current_user.username }}</strong><br>
+                        <small class="text-muted">User Account</small>
+                    </li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('web.dashboard') }}">
+                            🏠 Dashboard
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('web.analytics') }}">
+                            📊 Analytics
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('web.settings') }}">
+                            ⚙️ Settings
+                        </a>
+                    </li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <li>
+                        <a class="dropdown-item text-danger fw-semibold"
+                           href="{{ url_for('auth.logout') }}">
+                            🚪 Logout
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            {% else %}
+
+            <li class="nav-item">
+                <a class="btn btn-light btn-sm px-3" href="{{ url_for('auth.login') }}">
+                    Login
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="btn btn-warning btn-sm px-3 fw-bold" href="{{ url_for('auth.register') }}">
+                    Sign Up
+                </a>
+            </li>
+
+            {% endif %}
+
+        </ul>
+
+    </div>
+
+</div>
+
+</nav>
+
+<!-- SPACER -->
+<div style="height:70px;"></div>

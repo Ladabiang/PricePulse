@@ -1,0 +1,132 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="page-title mb-1">Stores Overview</h2>
+        <small class="text-muted">Monitor product distribution across platforms</small>
+    </div>
+
+    <div class="d-flex gap-2">
+        <input type="text" id="storeSearch" class="form-control" placeholder="Search store..." style="max-width:220px;">
+        <button class="btn btn-primary">Export</button>
+    </div>
+</div>
+
+
+<!-- ===================== TABLE ===================== -->
+<div class="card-box">
+
+    {% if stores %}
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" id="storeTable">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Store</th>
+                    <th>Total Products</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for store in stores %}
+            <tr>
+
+                <!-- RANK -->
+                <td class="fw-semibold">#{{ loop.index }}</td>
+
+                <!-- STORE NAME -->
+                <td>
+                    <span class="fw-semibold">{{ store.name }}</span>
+                </td>
+
+                <!-- COUNT -->
+                <td class="fw-bold text-primary">
+                    {{ store.count }}
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                    {% if store.count > 20 %}
+                        <span class="badge bg-success">High Activity</span>
+                    {% elif store.count > 10 %}
+                        <span class="badge bg-warning text-dark">Moderate</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Low</span>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <!-- EMPTY STATE -->
+    <div class="text-center py-5">
+        <h5 class="fw-bold">No Store Data</h5>
+        <p class="text-muted">
+            Store statistics will appear once products are linked.
+        </p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- ===================== INSIGHTS ===================== -->
+<div class="card-box mt-4">
+
+    <h5 class="fw-bold mb-3">Insights</h5>
+
+    <ul class="list-group list-group-flush">
+
+        <li class="list-group-item d-flex justify-content-between">
+            Total Stores
+            <span class="fw-semibold">
+                {{ stores|length }}
+            </span>
+        </li>
+
+        <li class="list-group-item d-flex justify-content-between">
+            Top Store
+            <span class="fw-semibold">
+                {{ stores[0].name if stores else "-" }}
+            </span>
+        </li>
+
+        <li class="list-group-item d-flex justify-content-between">
+            System Status
+            <span class="text-success fw-semibold">
+                Active
+            </span>
+        </li>
+
+    </ul>
+
+</div>
+
+
+<!-- SEARCH SCRIPT -->
+<script>
+document.getElementById("storeSearch")?.addEventListener("keyup", function(){
+    let value = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#storeTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+});
+</script>
+
+{% endblock %}

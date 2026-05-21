@@ -1,0 +1,133 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="page-title mb-1">User Management</h2>
+        <small class="text-muted">Manage system users, roles and access</small>
+    </div>
+
+    <div class="d-flex gap-2">
+        <input type="text" id="userSearch" class="form-control" placeholder="Search users..." style="max-width:220px;">
+        <a href="{{ url_for('admin.export_users') }}" class="btn btn-primary">
+            Export
+        </a>
+    </div>
+</div>
+
+
+<!-- ===================== TABLE ===================== -->
+<div class="card-box">
+
+    {% if users %}
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" id="userTable">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th style="width:180px;">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for user in users %}
+            <tr>
+
+                <!-- ID -->
+                <td class="fw-semibold">#{{ user.id }}</td>
+
+                <!-- NAME -->
+                <td>
+                    <div class="fw-semibold">{{ user.username }}</div>
+                </td>
+
+                <!-- EMAIL -->
+                <td class="text-muted">{{ user.email }}</td>
+
+                <!-- ROLE -->
+                <td>
+                    {% if user.role == "admin" %}
+                        <span class="badge bg-dark">Admin</span>
+                    {% else %}
+                        <span class="badge bg-secondary">User</span>
+                    {% endif %}
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                    {% if user.is_active %}
+                        <span class="badge bg-success">Active</span>
+                    {% else %}
+                        <span class="badge bg-danger">Banned</span>
+                    {% endif %}
+                </td>
+
+                <!-- ACTIONS -->
+                <td>
+
+                    <!-- BAN / UNBAN -->
+                    <a href="{{ url_for('admin.toggle_ban', user_id=user.id) }}"
+                       class="btn btn-warning btn-sm"
+                       onclick="return confirm('Are you sure you want to change status?')">
+
+                        {% if user.is_active %}
+                            Ban
+                        {% else %}
+                            Unban
+                        {% endif %}
+
+                    </a>
+
+                    <!-- DELETE -->
+                    <a href="{{ url_for('admin.delete_user', user_id=user.id) }}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Delete this user permanently?')">
+                        Delete
+                    </a>
+
+                </td>
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <!-- EMPTY STATE -->
+    <div class="text-center py-5">
+        <h5 class="fw-bold">No Users Found</h5>
+        <p class="text-muted">
+            Users will appear here once they register.
+        </p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- SEARCH SCRIPT -->
+<script>
+document.getElementById("userSearch")?.addEventListener("keyup", function(){
+    let value = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#userTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+});
+</script>
+
+{% endblock %}

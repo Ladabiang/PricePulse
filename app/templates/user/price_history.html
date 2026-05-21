@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ product.title }} | Price History</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg:#f4f6fb;
+    --primary:#4f46e5;
+    --secondary:#7c3aed;
+    --text:#0f172a;
+    --muted:#64748b;
+    --green:#16a34a;
+    --red:#dc2626;
+    --border:#e5e7eb;
+}
+
+body{
+    background:var(--bg);
+    font-family:'Inter', sans-serif;
+}
+
+/* NAVBAR */
+.navbar{
+    background:white;
+    border-bottom:1px solid var(--border);
+}
+
+/* HERO */
+.hero{
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    border-radius:22px;
+    padding:30px;
+    margin-top:20px;
+}
+
+.product-img{
+    width:90px;
+    height:90px;
+    object-fit:contain;
+    background:white;
+    border-radius:12px;
+    padding:6px;
+}
+
+/* STATS */
+.stat-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+}
+
+.stat-title{
+    font-size:12px;
+    color:var(--muted);
+}
+
+.stat-value{
+    font-size:22px;
+    font-weight:800;
+}
+
+/* CHART */
+.chart-box{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    border:1px solid var(--border);
+}
+
+/* TABLE */
+.table-box{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    border:1px solid var(--border);
+}
+
+.up{ color:var(--red); font-weight:700; }
+.down{ color:var(--green); font-weight:700; }
+
+/* EMPTY */
+.empty{
+    text-align:center;
+    padding:40px;
+    color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar py-3">
+<div class="container d-flex justify-content-between">
+
+<a href="{{ url_for('web.dashboard') }}" class="fw-bold text-decoration-none">
+PricePulse
+</a>
+
+<a href="{{ url_for('web.dashboard') }}" class="btn btn-outline-primary">
+<i class="bi bi-arrow-left"></i> Back
+</a>
+
+</div>
+</nav>
+
+<div class="container py-4">
+
+<!-- HERO -->
+<div class="hero d-flex justify-content-between align-items-center">
+
+<div>
+<h4 class="mb-1">{{ product.title }}</h4>
+<p class="mb-0">Smart price tracking & insights</p>
+</div>
+
+<img src="{{ product.image or 'https://via.placeholder.com/150' }}" class="product-img">
+
+</div>
+
+<!-- SAFE DATA -->
+{% set prices = prices or [] %}
+{% set dates = dates or [] %}
+
+<!-- STATS -->
+<div class="row mt-4 g-3">
+
+<div class="col-md-3">
+<div class="stat-card">
+<div class="stat-title">Current</div>
+<div class="stat-value text-primary">
+₹{{ prices[-1] if prices|length > 0 else 0 }}
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="stat-card">
+<div class="stat-title">Lowest</div>
+<div class="stat-value text-success">
+₹{{ prices|min if prices|length > 0 else 0 }}
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="stat-card">
+<div class="stat-title">Highest</div>
+<div class="stat-value text-danger">
+₹{{ prices|max if prices|length > 0 else 0 }}
+</div>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="stat-card">
+<div class="stat-title">Records</div>
+<div class="stat-value">{{ prices|length }}</div>
+</div>
+</div>
+
+</div>
+
+<!-- CHART -->
+<div class="chart-box mt-4">
+
+<h5 class="mb-3"> Price Trend</h5>
+
+{% if prices|length == 0 %}
+<div class="empty">
+No price history available
+</div>
+{% else %}
+<canvas id="priceChart"></canvas>
+{% endif %}
+
+</div>
+
+<!-- TABLE -->
+<div class="table-box mt-4">
+
+<h5 class="mb-3"> Price History</h5>
+
+{% if prices|length == 0 %}
+
+<div class="empty">
+No data to display
+</div>
+
+{% else %}
+
+<table class="table">
+<thead>
+<tr>
+<th>Date</th>
+<th>Price</th>
+<th>Change</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for i in range(prices|length) %}
+<tr>
+
+<td>{{ dates[i] }}</td>
+<td>₹{{ prices[i] }}</td>
+
+{% if i == 0 %}
+<td>-</td>
+<td>Start</td>
+
+{% else %}
+{% set diff = prices[i] - prices[i-1] %}
+
+<td>
+{% if diff > 0 %}
+<span class="up">+₹{{ diff }}</span>
+{% elif diff < 0 %}
+<span class="down">₹{{ diff }}</span>
+{% else %}
+₹0
+{% endif %}
+</td>
+
+<td>
+{% if diff > 0 %}
+⬆ Increased
+{% elif diff < 0 %}
+⬇ Dropped
+{% else %}
+No Change
+{% endif %}
+</td>
+
+{% endif %}
+
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+{% endif %}
+
+</div>
+
+</div>
+
+<!-- ================= CHART SCRIPT ================= -->
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    const dates = {{ dates | tojson }};
+    const prices = {{ prices | tojson }};
+
+    if(!dates || dates.length === 0) return;
+
+    const ctx = document.getElementById("priceChart");
+
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: dates,
+            datasets: [{
+                data: prices,
+                borderColor: "#4f46e5",
+                backgroundColor: "rgba(79,70,229,0.1)",
+                borderWidth: 3,
+                tension: 0.35,
+                fill: true,
+                pointRadius: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx){
+                            return " ₹" + ctx.parsed.y;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        callback: function(value){
+                            return "₹" + value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

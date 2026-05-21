@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PricePulse | Search</title>
+
+<!-- ================= GOOGLE FONT ================= -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ================= BOOTSTRAP ================= -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+
+/* ================= GLOBAL ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#e3e6e6;
+    color:#111827;
+    overflow-x:hidden;
+}
+
+/* ================= NAVBAR ================= */
+.navbar{
+    padding:16px 20px;
+    background:rgba(8,17,32,.96);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,.06);
+    position:sticky;
+    top:0;
+    z-index:9999;
+}
+
+.navbar .container-fluid{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.brand{
+    text-decoration:none;
+    font-size:34px;
+    font-weight:800;
+    color:#fff;
+}
+
+.brand span{
+    color:#38bdf8;
+}
+
+/* ================= SEARCH BAR ================= */
+.search-bar{
+    display:flex;
+    align-items:center;
+    flex:1;
+    max-width:850px;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid rgba(0,0,0,0.08);
+}
+
+.search-input{
+    flex:1;
+    border:none;
+    padding:14px 16px;
+    font-size:15px;
+    outline:none;
+}
+
+.search-btn{
+    background:#38bdf8;
+    border:none;
+    padding:14px 18px;
+    color:#fff;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.search-btn:hover{
+    background:#0ea5e9;
+}
+
+/* ================= USER BUTTON ================= */
+.user-btn{
+    background:#111827;
+    color:#fff;
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    font-weight:600;
+}
+
+/* ================= MAIN WRAPPER ================= */
+.wrapper{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+    width:280px;
+    background:#fff;
+    padding:22px;
+    border-right:1px solid #ddd;
+    position:sticky;
+    top:80px;
+    height:calc(100vh - 80px);
+}
+
+.sidebar h5{
+    font-size:22px;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.filter-label{
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:8px;
+    display:block;
+}
+
+.sidebar input,
+.sidebar select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #d1d5db;
+    margin-bottom:16px;
+    outline:none;
+}
+
+.filter-btn{
+    width:100%;
+    border:none;
+    padding:12px;
+    border-radius:12px;
+    background:#38bdf8;
+    color:#fff;
+    font-weight:700;
+    transition:0.2s;
+}
+
+.filter-btn:hover{
+    background:#0ea5e9;
+}
+
+/* ================= CONTENT ================= */
+.content{
+    flex:1;
+    padding:30px;
+}
+
+/* ================= SEARCH HEADER ================= */
+.results-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.results-title{
+    font-size:30px;
+    font-weight:800;
+}
+
+.results-sub{
+    color:#6b7280;
+    font-size:14px;
+}
+
+/* ================= GRID ================= */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:24px;
+}
+
+/* ================= CARD ================= */
+.card{
+    background:#fff;
+    border:none;
+    border-radius:20px;
+    padding:18px;
+    transition:0.3s;
+    overflow:hidden;
+    position:relative;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 40px rgba(0,0,0,0.12);
+}
+
+/* ================= PRODUCT IMAGE ================= */
+.card img{
+    width:100%;
+    height:260px;
+    object-fit:contain;
+    background:#fff;
+    border-radius:14px;
+}
+
+/* ================= WEBSITE BADGE ================= */
+.website-badge{
+    position:absolute;
+    top:18px;
+    left:18px;
+    background:#111827;
+    color:#fff;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+}
+
+/* ================= PRODUCT TITLE ================= */
+.title{
+    font-size:15px;
+    font-weight:700;
+    margin-top:16px;
+    min-height:52px;
+    line-height:1.5;
+}
+
+/* ================= PRICE ================= */
+.price{
+    font-size:28px;
+    font-weight:800;
+    margin-top:10px;
+    color:#111827;
+}
+
+.old{
+    text-decoration:line-through;
+    color:#9ca3af;
+    font-size:14px;
+}
+
+/* ================= ACTIONS ================= */
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+}
+
+.track{
+    flex:1;
+    border:none;
+    border-radius:12px;
+    padding:12px;
+    background:#38bdf8;
+    color:#fff;
+    font-weight:700;
+    transition:0.2s;
+}
+
+.track:hover{
+    background:#0ea5e9;
+}
+
+.view{
+    flex:1;
+    border-radius:12px;
+    padding:12px;
+    background:#111827;
+    color:#fff;
+    text-decoration:none;
+    text-align:center;
+    font-weight:700;
+    transition:0.2s;
+}
+
+.view:hover{
+    background:#1f2937;
+    color:#fff;
+}
+
+/* ================= FULL PRODUCT VIEW ================= */
+.single-product{
+    max-width:1200px;
+    margin:auto;
+    background:#fff;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 20px 40px rgba(0,0,0,0.08);
+}
+
+.single-product-inner{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    padding:40px;
+}
+
+.single-product-image{
+    background:#f9fafb;
+    border-radius:20px;
+    padding:30px;
+}
+
+.single-product-image img{
+    width:100%;
+    height:500px;
+    object-fit:contain;
+}
+
+.single-product-details h2{
+    font-size:34px;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.single-product-price{
+    font-size:42px;
+    font-weight:800;
+    color:#111827;
+}
+
+.single-product-site{
+    display:inline-block;
+    margin-top:14px;
+    background:#111827;
+    color:#fff;
+    padding:10px 18px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:700;
+}
+
+.single-actions{
+    display:flex;
+    gap:14px;
+    margin-top:30px;
+}
+
+/* ================= EMPTY ================= */
+.empty{
+    background:#fff;
+    padding:80px 30px;
+    border-radius:20px;
+    text-align:center;
+    color:#6b7280;
+    font-size:20px;
+    font-weight:600;
+}
+
+/* ================= FOOTER ================= */
+.footer-top{
+    background:#232f3e;
+    color:#ddd;
+    padding:50px 0;
+    margin-top:60px;
+}
+
+.footer-top h6{
+    color:#fff;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.footer-top p{
+    font-size:13px;
+    margin:6px 0;
+}
+
+.footer-bottom{
+    background:#131a22;
+    color:#ccc;
+    text-align:center;
+    padding:20px;
+    font-size:13px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:992px){
+
+    .wrapper{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        position:relative;
+        height:auto;
+        top:0;
+    }
+
+    .single-product-inner{
+        grid-template-columns:1fr;
+    }
+
+    .single-product-image img{
+        height:320px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+
+<div class="container-fluid">
+
+    <a href="{{ url_for('web.dashboard') }}" class="brand">
+        Price<span>Pulse</span>
+    </a>
+
+    <!-- SEARCH -->
+    <form method="GET"
+          action="{{ url_for('web.search_page') }}"
+          class="search-bar">
+
+        <input type="text"
+               name="q"
+               placeholder="Search products or paste URL..."
+               value="{{ query or '' }}"
+               class="search-input">
+
+        <button type="submit" class="search-btn">
+            <i class="bi bi-search"></i>
+        </button>
+
+    </form>
+
+    <!-- USER -->
+    <div class="dropdown">
+
+        <button class="user-btn dropdown-toggle"
+                data-bs-toggle="dropdown">
+
+            {{ current_user.username }}
+
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+
+            <li>
+                <a class="dropdown-item"
+                   href="{{ url_for('web.history') }}">
+                    History
+                </a>
+            </li>
+
+            <li>
+                <a class="dropdown-item"
+                   href="{{ url_for('web.alerts') }}">
+                    Alerts
+                </a>
+            </li>
+
+            <li>
+                <a class="dropdown-item"
+                   href="{{ url_for('web.saved') }}">
+                    Saved
+                </a>
+            </li>
+
+            <li><hr class="dropdown-divider"></li>
+
+            <li>
+                <a class="dropdown-item text-danger"
+                   href="{{ url_for('web.logout') }}">
+                    Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+</nav>
+
+<!-- ================= MAIN ================= -->
+<div class="wrapper">
+
+<!-- ================= SIDEBAR ================= -->
+<div class="sidebar">
+
+    <h5>Filters</h5>
+
+    <label class="filter-label">Minimum Price</label>
+    <input type="number" placeholder="₹ Min Price">
+
+    <label class="filter-label">Maximum Price</label>
+    <input type="number" placeholder="₹ Max Price">
+
+    <label class="filter-label">Marketplace</label>
+    <select>
+        <option>All Sites</option>
+        <option>Amazon</option>
+        <option>Flipkart</option>
+        <option>Snapdeal</option>
+    </select>
+
+    <button class="filter-btn">
+        Apply Filters
+    </button>
+
+</div>
+
+<!-- ================= CONTENT ================= -->
+<div class="content">
+
+{% if results and results|length > 0 %}
+
+<div class="results-header">
+
+    <div>
+        <div class="results-title">
+            Search Results
+        </div>
+
+        <div class="results-sub">
+            Smart marketplace tracking results
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= SINGLE PRODUCT URL VIEW ================= -->
+{% if results|length == 1 and results[0].url %}
+
+<div class="single-product">
+
+    <div class="single-product-inner">
+
+        <!-- IMAGE -->
+        <div class="single-product-image">
+
+            <img src="{{ results[0].image or 'https://via.placeholder.com/600' }}">
+
+        </div>
+
+        <!-- DETAILS -->
+        <div class="single-product-details">
+
+            <span class="single-product-site">
+                {{ results[0].website }}
+            </span>
+
+            <h2>
+                {{ results[0].title }}
+            </h2>
+
+            <div class="single-product-price">
+                ₹{{ results[0].price }}
+            </div>
+
+            <div class="old mt-2">
+                ₹{{ (results[0].price or 0) * 1.1 }}
+            </div>
+
+            <div class="single-actions">
+
+                <form method="POST"
+                      action="{{ url_for('web.track_product_route') }}"
+                      style="flex:1;">
+
+                    <input type="hidden"
+                           name="name"
+                           value="{{ results[0].title }}">
+
+                    <input type="hidden"
+                           name="price"
+                           value="{{ results[0].price }}">
+
+                    <input type="hidden"
+                           name="website"
+                           value="{{ results[0].website }}">
+
+                    <input type="hidden"
+                           name="url"
+                           value="{{ results[0].url }}">
+
+                    <button class="track w-100" type="submit">
+                        Track Product
+                    </button>
+
+                </form>
+
+                <a href="{{ results[0].url }}"
+                   target="_blank"
+                   class="view">
+
+                    View Product
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% else %}
+
+<!-- ================= GRID VIEW ================= -->
+<div class="grid">
+
+{% for p in results %}
+
+<div class="card">
+
+    <!-- WEBSITE -->
+    <div class="website-badge">
+        {{ p.website }}
+    </div>
+
+    <!-- IMAGE -->
+    <img src="{{ p.image or 'https://via.placeholder.com/300' }}">
+
+    <!-- TITLE -->
+    <div class="title">
+        {{ p.title }}
+    </div>
+
+    <!-- PRICE -->
+    <div class="price">
+        ₹{{ p.price }}
+    </div>
+
+    <!-- OLD -->
+    <div class="old">
+        ₹{{ (p.price or 0) * 1.1 }}
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+
+        <form method="POST"
+              action="{{ url_for('web.track_product_route') }}"
+              style="flex:1;">
+
+            <input type="hidden"
+                   name="name"
+                   value="{{ p.title }}">
+
+            <input type="hidden"
+                   name="price"
+                   value="{{ p.price }}">
+
+            <input type="hidden"
+                   name="website"
+                   value="{{ p.website }}">
+
+            <input type="hidden"
+                   name="url"
+                   value="{{ p.url }}">
+
+            <button class="track" type="submit">
+                Track
+            </button>
+
+        </form>
+
+        <a href="{{ p.url }}"
+           target="_blank"
+           class="view">
+
+            View
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endif %}
+
+{% else %}
+
+<div class="empty">
+     Search products or paste URL to start tracking prices
+</div>
+
+{% endif %}
+
+</div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<div class="footer-top">
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <h6>About</h6>
+            <p>PricePulse</p>
+            <p>Careers</p>
+        </div>
+
+        <div class="col-md-3">
+            <h6>Tracking</h6>
+            <p>Price History</p>
+            <p>Alerts</p>
+        </div>
+
+        <div class="col-md-3">
+            <h6>Help</h6>
+            <p>Support</p>
+            <p>FAQ</p>
+        </div>
+
+        <div class="col-md-3">
+            <h6>Account</h6>
+            <p>Login</p>
+            <p>Settings</p>
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+<div class="footer-bottom">
+    © 2026 PricePulse | Smart Price Intelligence System
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

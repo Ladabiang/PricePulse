@@ -1,0 +1,72 @@
+<div class="sidebar d-flex flex-column">
+
+    <!-- BRAND -->
+    <div class="brand mb-4">
+        Price<span style="color:#4f46e5;">Pulse</span>
+        <div style="font-size:12px; color:#94a3b8;">Admin Panel</div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="mb-3">
+        <div class="text-uppercase small text-muted mb-2">Overview</div>
+
+        <a href="{{ url_for('admin.admin_dashboard') }}"
+           class="side-link {% if request.endpoint == 'admin.admin_dashboard' %}active{% endif %}">
+            📊 Dashboard
+        </a>
+
+        <a href="{{ url_for('admin.reports') }}"
+           class="side-link {% if request.endpoint == 'admin.reports' %}active{% endif %}">
+            📈 Reports
+        </a>
+    </div>
+
+    <!-- MANAGEMENT -->
+    <div class="mb-3">
+        <div class="text-uppercase small text-muted mb-2">Management</div>
+
+        <a href="{{ url_for('admin.users') }}"
+           class="side-link {% if request.endpoint == 'admin.users' %}active{% endif %}">
+            👤 Users
+        </a>
+
+        <a href="{{ url_for('admin.products') }}"
+           class="side-link {% if request.endpoint == 'admin.products' %}active{% endif %}">
+            📦 Products
+        </a>
+    </div>
+
+    <!-- TRACKING -->
+    <div class="mb-3">
+        <div class="text-uppercase small text-muted mb-2">Tracking</div>
+
+        <a href="{{ url_for('admin.price_history') }}"
+           class="side-link {% if request.endpoint == 'admin.price_history' %}active{% endif %}">
+            📊 Price History
+        </a>
+
+        <a href="{{ url_for('admin.watchlist') }}"
+           class="side-link {% if request.endpoint == 'admin.watchlist' %}active{% endif %}">
+            ⭐ Watchlist
+        </a>
+
+        <a href="{{ url_for('admin.alerts') }}"
+           class="side-link {% if request.endpoint == 'admin.alerts' %}active{% endif %}">
+            🔔 Alerts
+        </a>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="mt-auto">
+
+        <hr class="border-secondary">
+
+        
+        <a href="{{ url_for('auth.logout') }}"
+           class="side-link text-danger">
+            ⏻ Logout
+        </a>
+
+    </div>
+
+</div>

@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PricePulse | Dashboard</title>
+
+<!-- ================= BOOTSTRAP ================= -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- ================= FONT ================= -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* ================= GLOBAL ================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    color:#111827;
+    overflow-x:hidden;
+}
+
+/* ================= DARK TOP SECTION (NAV + HERO) ================= */
+.dark-section{
+    background: radial-gradient(circle at top left,#2563eb55,transparent 25%),
+                radial-gradient(circle at bottom right,#7c3aed55,transparent 25%),
+                #081120;
+    color:#fff;
+}
+
+/* ================= NAVBAR ================= */
+.navbar{
+    padding:18px 0;
+    background:rgba(8,17,32,.85);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,.06);
+    position:fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+.brand{
+    text-decoration:none;
+    font-size:34px;
+    font-weight:800;
+    color:#fff;
+}
+
+.brand span{ color:#38bdf8; }
+
+/* ================= SEARCH BAR ================= */
+
+.search-bar{
+    display: flex;
+    align-items: center;
+    width: 520px;
+    max-width: 100%;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* input */
+.search-input{
+    flex: 1;
+    border: none;
+    padding: 12px 14px;
+    font-size: 14px;
+    outline: none;
+}
+
+/* button */
+.search-btn{
+    background: #38bdf8;
+    border: none;
+    padding: 10px 16px;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.search-btn:hover{
+    background: #0ea5e9;
+}
+
+.account-btn{
+    color:#fff;
+    background:transparent;
+    border:none;
+    text-align:right;
+    font-size:15px;
+}
+
+.account-btn small{ color:#cbd5e1; font-size:12px; }
+
+.logout-btn{
+    margin-left:12px;
+    padding:8px 14px;
+    border-radius:10px;
+
+    border:1px solid #38bdf8;
+    color:#38bdf8;
+    background:transparent;
+
+    font-weight:600;
+    transition: all 0.25s ease;
+}
+
+.logout-btn:hover{
+    background:#38bdf8;
+    color:#081120;
+}
+
+/* ================= HERO ================= */
+.hero{
+    padding:90px 0;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:64px;
+    font-weight:800;
+}
+
+.hero p{
+    font-size:20px;
+    color:#cbd5e1;
+    max-width:700px;
+    margin:auto;
+}
+
+/* ================= LIGHT SECTION (STATS + PRODUCTS) ================= */
+.light-section{
+    background:#e3e6e6;
+    padding:60px 0;
+}
+
+.section-title{
+    font-size:26px;
+    font-weight:800;
+    margin-bottom:20px;
+    color:#111827;
+}
+
+/* ================= STATS ================= */
+.stat-card{
+    background:#fff;
+    border-radius:18px;
+    padding:22px;
+    text-align:center;
+    border:1px solid #ddd;
+}
+
+.stat-card h4{
+    font-size:26px;
+    font-weight:800;
+}
+
+.stat-card small{ color:#555; }
+
+/* ================= PRODUCTS ================= */
+.product-card{
+    background:#fff;
+    border-radius:18px;
+    padding:16px;
+    border:1px solid #ddd;
+    transition:.3s;
+}
+
+.product-card:hover{
+    transform:translateY(-6px);
+    border-color:#38bdf8;
+}
+
+.price{ font-size:20px; font-weight:800; }
+.old{ text-decoration:line-through; color:#888; font-size:13px; }
+
+.track-btn{
+    background:#38bdf8;
+    border:none;
+    width:100%;
+    padding:8px;
+    border-radius:10px;
+    font-weight:700;
+    color:#fff;
+}
+/* ================= CATEGORY BAR ================= */
+.category-bar{
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    padding: 12px 18px;
+    align-items: center;
+    overflow-x: auto;
+
+    position: sticky;
+    top: 70px;
+    z-index: 9998;
+
+    background: rgba(8,17,32,0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* scrollbar */
+.category-bar::-webkit-scrollbar{
+    height: 6px;
+}
+.category-bar::-webkit-scrollbar-thumb{
+    background: #38bdf8;
+    border-radius: 10px;
+}
+
+/* ================= CATEGORY ITEM ================= */
+.cat-item{
+    position: relative;
+    flex: 0 0 auto;
+}
+
+/* ================= BUTTON ================= */
+.cat-btn{
+    font-size: 15px;
+    font-weight: 700;
+    padding: 9px 14px;
+    border-radius: 10px;
+
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.10);
+
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.cat-btn:hover{
+    color: #38bdf8;
+    border-color: #38bdf8;
+}
+
+/* ================= MEGA DROPDOWN ================= */
+.mega-panel{
+    width: 720px;
+    padding: 20px;
+
+    background: #0f172a;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.cat-item:hover .mega-panel{
+    display: block;
+}
+
+/* FLEX INSIDE ONLY */
+.mega-wrapper{
+    display: flex;
+    flex-direction: column; 
+    gap: 40px;
+}
+
+/* ================= COLUMN ================= */
+.mega-column{
+    min-width: 180px;
+}
+
+.mega-column h6{
+    font-size: 14px;
+    font-weight: 800;
+    color: #38bdf8;
+    margin-bottom: 10px;
+}
+
+.mega-column a{
+    display: block;
+    font-size: 14px;
+    color: #cbd5e1;
+    text-decoration: none;
+    margin-bottom: 6px;
+}
+
+.mega-column a:hover{
+    color: #fff;
+}
+
+.mega-panel{
+    display: none;   /* 🔥 IMPORTANT */
+    margin-top: 0;   /* remove gap */
+    z-index: 10001;
+}
+
+.category-bar,
+.dark-section,
+.navbar{
+    overflow: visible !important;
+}
+
+/* ================= ANIMATION ================= */
+.dropdown-menu{
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ================= AMAZON FOOTER ================= */
+.footer-top{
+  background:#232f3e;
+  color:#ddd;
+  padding:40px 0;
+  margin-top:50px;
+}
+
+.footer-top h6{
+  color:#fff;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+.footer-bottom{
+  background:#131a22;
+  color:#ccc;
+  text-align:center;
+  padding:20px;
+  font-size:13px;
+}
+
+.footer-top p{
+  font-size:13px;
+  margin:6px 0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= DARK TOP SECTION ================= -->
+<div class="dark-section">
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container-fluid d-flex align-items-center gap-3">
+
+            <a href="#" class="brand">Price<span>Pulse</span></a>
+
+           <form method="GET" action="/search" class="search-bar" role="search">
+
+                <label class="visually-hidden" for="searchInput">Search</label>
+
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    name="q" 
+                    class="search-input"
+                    placeholder="Search products or paste a URL..."
+                    value="{{ search_query or '' }}"
+                    autocomplete="off"
+                    required
+                >
+
+                <!-- Optional: Clear button -->
+                {% if search_query %}
+                <a href="/dashboard" class="search-clear" title="Clear search">
+                    ✕
+                </a>
+                {% endif %}
+
+                <button type="submit" class="search-btn" aria-label="Search">
+                    <i class="bi bi-search"></i>
+                </button>
+
+            </form>
+            <div class="dropdown text-end">
+               <button class="account-btn dropdown-toggle" data-bs-toggle="dropdown">
+                    <small>Hello,</small><br>
+                    <strong>{{ current_user.username }}</strong>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('web.history') }}">
+                             Tracking History
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('web.alerts') }}">
+                             Alerts
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('web.saved') }}">
+                             Saved Items
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{{ url_for('web.settings') }}">
+                             Settings
+                        </a>
+                    </li>
+
+    <li><hr class="dropdown-divider"></li>
+
+        <li>
+            <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+                 Logout
+            </a>
+        </li>
+
+</ul>
+            </div>
+
+            <a href="{{ url_for('auth.logout') }}" class="logout-btn text-decoration-none">
+                Logout
+            </a>
+        </div>
+    </nav>
+    <!-- ================= CATEGORY BAR ================= -->
+    <div class="category-bar">
+
+        <!-- ELECTRONICS -->
+        <div class="dropdown cat-item">
+
+        <button class="btn cat-btn dropdown-toggle"
+                data-bs-toggle="dropdown"
+                data-bs-auto-close="outside">
+             Electronics
+        </button>
+
+        <div class="dropdown-menu mega-panel">
+            
+            <div class="mega-wrapper">
+
+                <div class="mega-column">
+                    <h6>Smart Devices</h6>
+                    <a href="{{ url_for('web.shop', category='electronics', sub='smartphones') }}">Smartphones</a>
+                    <a href="{{ url_for('web.shop', category='electronics', sub='gamingphones') }}">Gaming Phones</a>
+                    <a href="{{ url_for('web.shop', category='electronics', sub='budgetphones') }}">Budget Phones</a>
+                    <a href="{{ url_for('web.shop', category='electronics', sub='tablets') }}">Tablets</a>
+                    <a href="{{ url_for('web.shop', category='electronics', sub='smartwatches') }}">Smartwatches</a>
+                </div>
+
+                <div class="mega-column">
+                    <h6>Accessories</h6>
+                    <a href="{{ url_for('web.shop', category='electronics', sub='chargers') }}">Chargers</a>
+                    <a href="{{ url_for('web.shop', category='electronics', sub='powerbanks') }}">Power Banks</a>
+                    <a href="{{ url_for('web.shop', category='electronics', sub='cables') }}">Cables</a>
+                    <a href="{{ url_for('web.shop', category='electronics', sub='cases') }}">Cases</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+        <!-- COMPUTING -->
+        <div class="dropdown cat-item">
+            <button class="btn cat-btn dropdown-toggle" data-bs-toggle="dropdown">
+                 Computing
+            </button>
+
+            <div class="dropdown-menu mega-panel">
+
+                <div class="mega-column">
+                    <h6>Laptops & PCs</h6>
+                    <a href="{{ url_for('web.shop', category='computing', sub='laptops') }}">Laptops</a>
+                    <a href="{{ url_for('web.shop', category='computing', sub='gaming-laptops') }}">Gaming Laptops</a>
+                    <a href="{{ url_for('web.shop', category='computing', sub='ultrabooks') }}">Ultrabooks</a>
+                    <a href="{{ url_for('web.shop', category='computing', sub='macbooks') }}">MacBooks</a>
+                    <a href="{{ url_for('web.shop', category='computing', sub='desktops') }}">Desktop PCs</a>
+                    <a href="{{ url_for('web.shop', category='computing', sub='monitors') }}">Monitors</a>
+                    <a href="{{ url_for('web.shop', category='computing', sub='printers') }}">Printers</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ENTERTAINMENT -->
+        <div class="dropdown cat-item">
+            <button class="btn cat-btn dropdown-toggle" data-bs-toggle="dropdown">
+                 Entertainment
+            </button>
+
+            <div class="dropdown-menu mega-panel">
+
+                <div class="mega-column">
+                    <h6>Home Entertainment</h6>
+                    <a href="{{ url_for('web.shop', category='entertainment', sub='smart-tv') }}">Smart TVs</a>
+                    <a href="{{ url_for('web.shop', category='entertainment', sub='oled-tv') }}">LED / OLED TVs</a>
+                    <a href="{{ url_for('web.shop', category='entertainment', sub='streaming') }}">Streaming Devices</a>
+                    <a href="{{ url_for('web.shop', category='entertainment', sub='soundbars') }}">Soundbars</a>
+                    <a href="{{ url_for('web.shop', category='entertainment', sub='home-theatre') }}">Home Theatre</a>
+                    <a href="{{ url_for('web.shop', category='entertainment', sub='speakers') }}">Speakers</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- AUDIO -->
+        <div class="dropdown cat-item">
+            <button class="btn cat-btn dropdown-toggle" data-bs-toggle="dropdown">
+                 Audio
+            </button>
+
+            <div class="dropdown-menu mega-panel">
+
+                <div class="mega-column">
+                    <h6>Wearables & Audio</h6>
+                    <a href="{{ url_for('web.shop', category='audio', sub='earbuds') }}">Earbuds</a>
+                    <a href="{{ url_for('web.shop', category='audio', sub='headphones') }}">Headphones</a>
+                    <a href="{{ url_for('web.shop', category='audio', sub='neckbands') }}">Neckbands</a>
+                    <a href="{{ url_for('web.shop', category='audio', sub='bluetooth-speakers') }}">Bluetooth Speakers</a>
+                    <a href="{{ url_for('web.shop', category='audio', sub='wearables') }}">Smart Wearables</a>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MEN -->
+        <div class="dropdown cat-item">
+            <button class="btn cat-btn dropdown-toggle" data-bs-toggle="dropdown">
+                 Men
+            </button>
+
+            <div class="dropdown-menu mega-panel">
+
+                <div class="mega-column">
+                    <h6>Fashion (Men)</h6>
+                    <a href="{{ url_for('web.shop', category='men', sub='tshirts') }}">T-Shirts & Polos</a>
+                    <a href="{{ url_for('web.shop', category='men', sub='shirts') }}">Shirts</a>
+                    <a href="{{ url_for('web.shop', category='men', sub='jeans') }}">Jeans</a>
+                    <a href="{{ url_for('web.shop', category='men', sub='jackets') }}">Jackets</a>
+                    <a href="{{ url_for('web.shop', category='men', sub='ethnic') }}">Ethnic Wear</a>
+                    <a href="{{ url_for('web.shop', category='men', sub='innerwear') }}">Innerwear</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- WOMEN -->
+        <div class="dropdown cat-item">
+            <button class="btn cat-btn dropdown-toggle" data-bs-toggle="dropdown">
+                 Women
+            </button>
+
+            <div class="dropdown-menu mega-panel">
+
+                <div class="mega-column">
+                    <h6>Fashion (Women)</h6>
+                    <a href="{{ url_for('web.shop', category='women', sub='dresses') }}">Dresses</a>
+                    <a href="{{ url_for('web.shop', category='women', sub='kurtis') }}">Kurtis</a>
+                    <a href="{{ url_for('web.shop', category='women', sub='sarees') }}">Sarees</a>
+                    <a href="{{ url_for('web.shop', category='women', sub='tops') }}">Tops & Tees</a>
+                    <a href="{{ url_for('web.shop', category='women', sub='ethnic') }}">Ethnic Wear</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- FOOTWEAR -->
+        <div class="dropdown cat-item">
+            <button class="btn cat-btn dropdown-toggle" data-bs-toggle="dropdown">
+                 Footwear
+            </button>
+
+            <div class="dropdown-menu mega-panel">
+
+                <div class="mega-column">
+                    <h6>Shoes</h6>
+                    <a href="{{ url_for('web.shop', category='footwear', sub='sneakers') }}">Sneakers</a>
+                    <a href="{{ url_for('web.shop', category='footwear', sub='running') }}">Running Shoes</a>
+                    <a href="{{ url_for('web.shop', category='footwear', sub='formal') }}">Formal Shoes</a>
+                    <a href="{{ url_for('web.shop', category='footwear', sub='sandals') }}">Sandals</a>
+                    <a href="{{ url_for('web.shop', category='footwear', sub='slippers') }}">Slippers</a>
+                    <a href="{{ url_for('web.shop', category='footwear', sub='sports') }}">Sports Shoes</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- JEWELLERY -->
+        <div class="dropdown cat-item">
+            <button class="btn cat-btn dropdown-toggle" data-bs-toggle="dropdown">
+                 Jewellery
+            </button>
+
+            <div class="dropdown-menu mega-panel">
+
+                <div class="mega-column">
+                    <h6>Accessories</h6>
+                    <a href="{{ url_for('web.shop', category='jewellery', sub='gold') }}">Gold Jewellery</a>
+                    <a href="{{ url_for('web.shop', category='jewellery', sub='silver') }}">Silver Jewellery</a>
+                    <a href="{{ url_for('web.shop', category='jewellery', sub='artificial') }}">Artificial Jewellery</a>
+                    <a href="{{ url_for('web.shop', category='jewellery', sub='rings') }}">Rings</a>
+                    <a href="{{ url_for('web.shop', category='jewellery', sub='necklaces') }}">Necklaces</a>
+                    <a href="{{ url_for('web.shop', category='jewellery', sub='earrings') }}">Earrings</a>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- BEAUTY -->
+        <div class="dropdown cat-item">
+            <button class="btn cat-btn dropdown-toggle" data-bs-toggle="dropdown">
+                 Beauty
+            </button>
+
+            <div class="dropdown-menu mega-panel">
+
+                <div class="mega-column">
+                    <h6>Personal Care</h6>
+                    <a href="{{ url_for('web.shop', category='beauty', sub='makeup') }}">Makeup</a>
+                    <a href="{{ url_for('web.shop', category='beauty', sub='skincare') }}">Skincare</a>
+                    <a href="{{ url_for('web.shop', category='beauty', sub='haircare') }}">Hair Care</a>
+                    <a href="{{ url_for('web.shop', category='beauty', sub='grooming') }}">Grooming Tools</a>
+                    <a href="{{ url_for('web.shop', category='beauty', sub='fragrance') }}">Fragrances</a>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- HOME -->
+        <div class="dropdown cat-item">
+            <button class="btn cat-btn dropdown-toggle" data-bs-toggle="dropdown">
+                 Home
+            </button>
+
+            <div class="dropdown-menu mega-panel">
+
+                <div class="mega-column">
+                    <h6>Home & Kitchen</h6>
+                    <a href="{{ url_for('web.shop', category='home', sub='appliances') }}">Kitchen Appliances</a>
+                    <a href="{{ url_for('web.shop', category='home', sub='cookware') }}">Cookware</a>
+                    <a href="{{ url_for('web.shop', category='home', sub='storage') }}">Storage</a>
+                    <a href="{{ url_for('web.shop', category='home', sub='decor') }}">Home Decor</a>
+                    <a href="{{ url_for('web.shop', category='home', sub='cleaning') }}">Cleaning Tools</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+            <!-- HERO -->
+            <section class="hero">
+                <div class="container">
+                    <h1>Smart Price Intelligence Dashboard</h1>
+                    <p>Track prices, detect drops and save money across all marketplaces in real time.</p>
+                </div>
+            </section>
+
+        </div>
+
+<!-- ================= LIGHT SECTION (PROFESSIONAL DASHBOARD AREA) ================= -->
+<div class="light-section">
+    <div class="container">
+
+        <!-- ================= INSIGHTS HEADER ================= -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h2 class="section-title mb-1">Your Insights</h2>
+                <small class="text-muted">Real-time tracking performance overview</small>
+            </div>
+
+            <div class="text-end">
+                <span class="badge bg-success">Live Data</span>
+            </div>
+        </div>
+
+        <!-- ================= STATS GRID ================= -->
+        <div class="row g-3 mb-5">
+
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <small>Tracked Products</small>
+                    <h4>{{ tracked }}</h4>
+                    <span class="text-success small">+2 today ↑</span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <small>Active Alerts</small>
+                    <h4>{{ alerts }}</h4>
+                    <span class="text-warning small">3 triggered </span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <small>Price Drops</small>
+                    <h4>{{ drops }}</h4>
+                    <span class="text-info small">Updated now </span>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <small>Total Savings</small>
+                    <h4>Rs{{ savings }}</h4>
+                    <span class="text-success small">This month </span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= PRODUCTS HEADER ================= -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="section-title">Recommended Deals</h2>
+
+            <div class="d-flex gap-2 flex-wrap">
+
+                <a href="{{ url_for('web.shop') }}"
+                class="btn btn-sm btn-outline-dark">All</a>
+
+                <a href="{{ url_for('web.shop', category='electronics', min=10000, max=30000) }}"
+                class="btn btn-sm btn-outline-primary">
+                    ₹10K - ₹30K
+                </a>
+
+                <a href="{{ url_for('web.shop', category='electronics', sub='laptops') }}"
+                class="btn btn-sm btn-outline-success">
+                    Laptops
+                </a>
+
+                <a href="{{ url_for('web.shop', category='electronics', sub='smartphones') }}"
+                class="btn btn-sm btn-outline-warning">
+                    Smartphones
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ================= PRODUCT GRID (DYNAMIC BACKEND VERSION) ================= -->
+        <div class="row g-4">
+
+            {% for p in products %}
+
+            <div class="col-md-3">
+                <div class="product-card">
+
+                    <!-- STORE + BADGE -->
+                    <div class="d-flex justify-content-between">
+
+                        <small class="text-muted">
+                            {{ p.website }}
+                        </small>
+
+                        {% if p.price_drop_detected %}
+                            <span class="badge bg-danger">
+                                -{{ p.drop_percent|default(10) }}% ↓
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success">
+                                Stable
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                    <!-- PRODUCT TITLE -->
+                    <h6 class="mt-2">
+                        {{ p.title }}
+                    </h6>
+
+                    <!-- PRICE -->
+                    <div class="price">
+                        ₹{{ p.current_price }}
+                    </div>
+
+                    <div class="old">
+                        ₹{{ p.original_price }}
+                    </div>
+
+                    <!-- INSIGHT MESSAGE -->
+                    {% if p.price_drop_detected %}
+                        <small class="text-success d-block mt-1">
+                             Price drop detected — good time to buy
+                        </small>
+                    {% else %}
+                        <small class="text-warning d-block mt-1">
+                             Price stable — monitor trend
+                        </small>
+                    {% endif %}
+
+                    <!-- ACTIONS -->
+                    <div class="d-grid gap-2 mt-3">
+
+                        <!-- TRACK FORM -->
+                        <form method="POST" action="/track-product">
+                            <input type="hidden" name="name" value="{{ p.title }}">
+                            <input type="hidden" name="price" value="{{ p.current_price }}">
+                            <input type="hidden" name="website" value="{{ p.website }}">
+                            <input type="hidden" name="url" value="{{ p.url }}">
+                            
+                            <button type="submit" class="track-btn">
+                                Track Price
+                            </button>
+                        </form>
+
+                        <!-- VIEW PRODUCT -->
+                        <a href="{{ p.url }}" target="_blank"
+                        class="btn btn-outline-secondary btn-sm">
+                            View Product
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<div class="footer-top">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3"><h6>About</h6><p>PricePulse</p><p>Careers</p></div>
+      <div class="col-md-3"><h6>Tracking</h6><p>Price History</p><p>Alerts</p></div>
+      <div class="col-md-3"><h6>Help</h6><p>Support</p><p>FAQ</p></div>
+      <div class="col-md-3"><h6>Account</h6><p>Login</p><p>Settings</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-bottom">
+  © 2026 PricePulse | Smart Price Intelligence System
+</div>
+<script>
+document.querySelectorAll('.cat-item').forEach(function(dropdown){
+
+    const toggle = dropdown.querySelector('[data-bs-toggle="dropdown"]');
+    const menu = dropdown.querySelector('.dropdown-menu');
+
+    const bsDropdown = bootstrap.Dropdown.getOrCreateInstance(toggle, {
+        autoClose: false   //  KEY FIX
+    });
+
+    let hideTimeout;
+
+    dropdown.addEventListener('mouseenter', () => {
+        clearTimeout(hideTimeout);
+        bsDropdown.show();
+    });
+
+    dropdown.addEventListener('mouseleave', () => {
+        hideTimeout = setTimeout(() => {
+            bsDropdown.hide();
+        }, 400); //  smoother delay
+    });
+
+});
+</script>
+
+</body>
+</html>

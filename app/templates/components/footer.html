@@ -1,0 +1,89 @@
+<!-- ================= FOOTER ================= -->
+<style>
+.pp-footer{
+    background:#1f2a3a;
+    color:#cbd5e1;
+    margin-top:60px;
+}
+
+.footer-title{
+    color:#ffffff;
+    font-weight:700;
+    margin-bottom:12px;
+    font-size:15px;
+}
+
+.pp-footer a{
+    display:block;
+    color:#94a3b8;
+    text-decoration:none;
+    margin-bottom:8px;
+    font-size:14px;
+    transition:0.2s ease;
+}
+
+.pp-footer a:hover{
+    color:#38bdf8;
+    padding-left:4px;
+}
+
+/* bottom bar */
+.footer-bottom{
+    background:#0b1220;
+    color:#94a3b8;
+    padding:12px;
+    font-size:13px;
+}
+
+/* spacing fix for mobile */
+@media (max-width:768px){
+    .pp-footer .row > div{
+        margin-bottom:20px;
+    }
+}
+</style>
+
+<footer class="pp-footer">
+
+    <div class="container py-5">
+
+        <div class="row">
+
+            <!-- About -->
+            <div class="col-md-3">
+                <h6 class="footer-title">About</h6>
+                <a href="#">PricePulse</a>
+                <a href="#">Careers</a>
+            </div>
+
+            <!-- Tracking -->
+            <div class="col-md-3">
+                <h6 class="footer-title">Tracking</h6>
+                <a href="{{ url_for('web.history') }}">Price History</a>
+                <a href="{{ url_for('web.alerts') }}">Alerts</a>
+            </div>
+
+            <!-- Help -->
+            <div class="col-md-3">
+                <h6 class="footer-title">Help</h6>
+                <a href="#">Support</a>
+                <a href="#">FAQ</a>
+            </div>
+
+            <!-- Account -->
+            <div class="col-md-3">
+                <h6 class="footer-title">Account</h6>
+                <a href="{{ url_for('web.dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('web.settings') }}">Settings</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bottom -->
+    <div class="footer-bottom text-center">
+        © 2026 PricePulse | Smart Price Intelligence System
+    </div>
+
+</footer>

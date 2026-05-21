@@ -1,0 +1,113 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="page-title mb-1">Product Offers</h2>
+        <small class="text-muted">Monitor best deals across all tracked platforms</small>
+    </div>
+
+    <div class="d-flex gap-2">
+        <input type="text" id="offerSearch" class="form-control" placeholder="Search offers..." style="max-width:220px;">
+        <button class="btn btn-primary">+ Add Offer</button>
+    </div>
+</div>
+
+
+<!-- CARD -->
+<div class="card-box">
+
+    {% if offers %}
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" id="offerTable">
+
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Website</th>
+                    <th>Price</th>
+                    <th>Offer Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for offer in offers %}
+            <tr>
+
+                <!-- PRODUCT -->
+                <td>
+                    <div class="fw-semibold">{{ offer.product.title }}</div>
+                    <small class="text-muted">ID: {{ offer.product.id }}</small>
+                </td>
+
+                <!-- WEBSITE -->
+                <td>
+                    <span class="badge bg-light text-dark border">
+                        {{ offer.website }}
+                    </span>
+                </td>
+
+                <!-- PRICE -->
+                <td class="fw-bold text-success">
+                    ₹{{ offer.price }}
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                    <span class="badge bg-success px-3 py-2">
+                        🔥 Best Deal
+                    </span>
+                </td>
+
+                <!-- ACTION -->
+                <td>
+                    <button class="btn btn-sm btn-outline-primary">
+                        View
+                    </button>
+
+                    <button class="btn btn-sm btn-outline-danger">
+                        Remove
+                    </button>
+                </td>
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <!-- EMPTY STATE -->
+    <div class="text-center py-5">
+        <h5 class="fw-bold">No Offers Available</h5>
+        <p class="text-muted mb-3">
+            Offers will appear here when products have discounted prices.
+        </p>
+        <button class="btn btn-primary">+ Add First Offer</button>
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- SEARCH SCRIPT -->
+<script>
+document.getElementById("offerSearch")?.addEventListener("keyup", function(){
+    let value = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#offerTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+});
+</script>
+
+{% endblock %}

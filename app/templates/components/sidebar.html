@@ -1,0 +1,152 @@
+<!-- templates/partials/sidebar.html -->
+
+<div class="sidebar d-flex flex-column p-3">
+
+    <!-- LOGO -->
+    <div class="text-center mb-4">
+        <h4 class="fw-bold text-primary"> PricePulse</h4>
+        <small class="text-muted">Admin Panel</small>
+    </div>
+
+    <!-- USER PROFILE -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body text-center">
+
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-2"
+                 style="width:60px;height:60px;font-size:22px;font-weight:bold;">
+
+                {{ current_user.username[0].upper() }}
+
+            </div>
+
+            <h6 class="mb-0">{{ current_user.username }}</h6>
+            <small class="text-muted">{{ current_user.role|title }}</small>
+
+        </div>
+    </div>
+
+    <!-- MENU -->
+    <ul class="nav nav-pills flex-column mb-auto gap-2">
+
+        <li class="nav-item">
+            <a href="{{ url_for('admin.admin_dashboard') }}"
+               class="nav-link text-dark sidebar-link">
+
+                 Dashboard
+
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('admin.analytics') }}"
+               class="nav-link text-dark sidebar-link">
+
+                 Analytics
+
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('admin.users') }}"
+               class="nav-link text-dark sidebar-link">
+
+                 Users
+
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('admin.products') }}"
+               class="nav-link text-dark sidebar-link">
+
+                 Products
+
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('admin.alerts') }}"
+               class="nav-link text-dark sidebar-link">
+
+                 Alerts
+
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('admin.settings') }}"
+               class="nav-link text-dark sidebar-link">
+
+                 Settings
+
+            </a>
+        </li>
+
+    </ul>
+
+    <!-- SYSTEM STATUS -->
+    <div class="mt-4 card border-0 shadow-sm">
+        <div class="card-body">
+
+            <h6 class="mb-3">System Status</h6>
+
+            <p class="mb-2">
+                <span class="badge bg-success">Running</span>
+                Scheduler
+            </p>
+
+            <p class="mb-0">
+                <span class="badge bg-primary">Live</span>
+                API Connected
+            </p>
+
+        </div>
+    </div>
+
+    <!-- LOGOUT -->
+    <div class="mt-auto pt-4">
+
+        <a href="{{ url_for('auth.logout') }}"
+           class="btn btn-danger w-100">
+
+             Logout
+
+        </a>
+
+    </div>
+
+</div>
+
+<style>
+.sidebar{
+    width:260px;
+    min-height:100vh;
+    background:white;
+    border-right:1px solid #e9ecef;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1000;
+}
+
+.sidebar-link{
+    border-radius:10px;
+    padding:12px 15px;
+    font-weight:500;
+    transition:0.2s ease;
+}
+
+.sidebar-link:hover{
+    background:#0d6efd;
+    color:white !important;
+    transform:translateX(4px);
+}
+
+@media(max-width:991px){
+    .sidebar{
+        position:relative;
+        width:100%;
+        min-height:auto;
+    }
+}
+</style>

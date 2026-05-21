@@ -1,0 +1,99 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="page-title mb-1">Alerts & Notifications</h2>
+        <p class="text-muted m-0">Monitor user price alerts and tracking status</p>
+    </div>
+
+    <div>
+        <button class="btn btn-primary btn-sm">
+            + Create Alert
+        </button>
+    </div>
+</div>
+
+<!-- Alerts Card -->
+<div class="card-box">
+
+    <!-- 🔥 FIX: use alerts.items instead of alerts|length -->
+    {% if alerts.items %}
+
+    <div class="table-responsive">
+        <table class="table align-middle table-hover">
+
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Product</th>
+                    <th>Target Price</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for alert in alerts.items %}
+            <tr>
+
+                <!-- USER -->
+                <td>
+                    <strong>
+                        {{ alert.user.username if alert.user else "Unknown User" }}
+                    </strong>
+                </td>
+
+                <!-- PRODUCT -->
+                <td>
+                    <div class="fw-semibold">
+                        {{ alert.product.title if alert.product else "N/A" }}
+                    </div>
+
+                    <small class="text-muted">
+                        {{ alert.product.website if alert.product and alert.product.website else "" }}
+                    </small>
+                </td>
+
+                <!-- TARGET PRICE -->
+                <td>
+                    <span class="fw-bold text-primary">
+                        ₹{{ alert.target_price }}
+                    </span>
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                    {% if alert.is_active %}
+                        <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+                            ● Active
+                        </span>
+                    {% else %}
+                        <span class="badge rounded-pill bg-secondary-subtle text-secondary px-3 py-2">
+                            ● Stopped
+                        </span>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <!-- EMPTY STATE -->
+    <div class="text-center py-5">
+        <h5 class="fw-bold mb-2">No Alerts Found</h5>
+        <p class="text-muted">Users haven’t created any alerts yet.</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

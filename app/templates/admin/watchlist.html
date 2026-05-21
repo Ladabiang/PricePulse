@@ -1,0 +1,178 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="page-title mb-1">User Watchlist</h2>
+        <small class="text-muted">Monitor all tracked products across users</small>
+    </div>
+
+    <input type="text" id="watchSearch" class="form-control"
+           placeholder="Search watchlist..."
+           style="max-width:220px;">
+</div>
+
+
+<!-- ===================== TABLE ===================== -->
+<div class="card-box">
+
+    {% if watchlist.items %}
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" id="watchTable">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Product</th>
+                    <th>Website</th>
+                    <th>Current Price</th>
+                    <th>Target</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for item in watchlist.items %}
+            <tr>
+
+                <td class="fw-semibold">
+                    #{{ loop.index + ((watchlist.page - 1) * watchlist.per_page) }}
+                </td>
+
+                <td class="fw-semibold">
+                    {{ item.user.username }}
+                </td>
+
+                <td>
+                    {{ item.product_name }}
+                </td>
+
+                <td class="text-muted">
+                    {{ item.website }}
+                </td>
+
+                <td class="fw-bold text-primary">
+                    ₹{{ item.price if item.price else "-" }}
+                </td>
+
+                <td>
+                    ₹{{ item.target_price if item.target_price else "-" }}
+                </td>
+
+                <td>
+                    {% if item.is_active %}
+                        <span class="badge bg-success">Tracking</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Stopped</span>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <!-- EMPTY STATE -->
+    <div class="text-center py-5">
+        <h5 class="fw-bold">No Watchlist Data</h5>
+        <p class="text-muted">
+            Users have not added any products yet.
+        </p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- ===================== PAGINATION ===================== -->
+<div class="d-flex justify-content-center mt-4">
+<nav>
+<ul class="pagination">
+
+{% if watchlist.has_prev %}
+<li class="page-item">
+<a class="page-link" href="{{ url_for('admin.watchlist', page=watchlist.prev_num) }}">Previous</a>
+</li>
+{% endif %}
+
+{% for p in watchlist.iter_pages() %}
+    {% if p %}
+    <li class="page-item {% if p == watchlist.page %}active{% endif %}">
+        <a class="page-link" href="{{ url_for('admin.watchlist', page=p) }}">{{ p }}</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">...</span></li>
+    {% endif %}
+{% endfor %}
+
+{% if watchlist.has_next %}
+<li class="page-item">
+<a class="page-link" href="{{ url_for('admin.watchlist', page=watchlist.next_num) }}">Next</a>
+</li>
+{% endif %}
+
+</ul>
+</nav>
+</div>
+
+
+<!-- ===================== INSIGHTS ===================== -->
+<div class="card-box mt-4">
+
+    <h5 class="fw-bold mb-3">Insights</h5>
+
+    <div class="row g-3">
+
+        <div class="col-md-4">
+            <div class="p-3 border rounded">
+                <small class="text-muted">Total Tracking</small>
+                <h5 class="fw-bold">{{ watchlist.total }}</h5>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-3 border rounded">
+                <small class="text-muted">Active Tracking</small>
+                <h5 class="fw-bold text-success">
+                    {{ watchlist.items | selectattr("is_active") | list | length }}
+                </h5>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-3 border rounded">
+                <small class="text-muted">Stopped</small>
+                <h5 class="fw-bold text-danger">
+                    {{ watchlist.items | rejectattr("is_active") | list | length }}
+                </h5>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SEARCH SCRIPT -->
+<script>
+document.getElementById("watchSearch")?.addEventListener("keyup", function(){
+    let value = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#watchTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+});
+</script>
+
+{% endblock %}

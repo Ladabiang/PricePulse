@@ -1,0 +1,132 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="page-title mb-1">Search Analytics</h2>
+        <small class="text-muted">Track user search behavior and trends</small>
+    </div>
+
+    <div class="d-flex gap-2">
+        <input type="text" id="searchFilter" class="form-control" placeholder="Search keyword..." style="max-width:220px;">
+        <button class="btn btn-primary">Export</button>
+    </div>
+</div>
+
+
+<!-- ===================== TABLE ===================== -->
+<div class="card-box">
+
+    {% if searches %}
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" id="searchTable">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Keyword</th>
+                    <th>Search Count</th>
+                    <th>Trend</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for item in searches %}
+            <tr>
+
+                <!-- RANK -->
+                <td class="fw-semibold">#{{ loop.index }}</td>
+
+                <!-- KEYWORD -->
+                <td>
+                    <span class="fw-semibold">{{ item.keyword }}</span>
+                </td>
+
+                <!-- COUNT -->
+                <td class="fw-bold text-primary">
+                    {{ item.count }}
+                </td>
+
+                <!-- TREND (STATIC FOR NOW) -->
+                <td>
+                    {% if item.count > 15 %}
+                        <span class="badge bg-success">🔥 High</span>
+                    {% elif item.count > 8 %}
+                        <span class="badge bg-warning text-dark">⚡ Medium</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Low</span>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <!-- EMPTY STATE -->
+    <div class="text-center py-5">
+        <h5 class="fw-bold">No Search Data</h5>
+        <p class="text-muted">
+            User search activity will appear here once the system is used.
+        </p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- ===================== INSIGHTS ===================== -->
+<div class="card-box mt-4">
+
+    <h5 class="fw-bold mb-3">Insights</h5>
+
+    <ul class="list-group list-group-flush">
+
+        <li class="list-group-item d-flex justify-content-between">
+            Most searched keyword
+            <span class="fw-semibold">
+                {{ searches[0].keyword if searches else "-" }}
+            </span>
+        </li>
+
+        <li class="list-group-item d-flex justify-content-between">
+            Total unique searches
+            <span class="fw-semibold">
+                {{ searches|length }}
+            </span>
+        </li>
+
+        <li class="list-group-item d-flex justify-content-between">
+            System behavior
+            <span class="text-success fw-semibold">
+                Active
+            </span>
+        </li>
+
+    </ul>
+
+</div>
+
+
+<!-- SEARCH FILTER SCRIPT -->
+<script>
+document.getElementById("searchFilter")?.addEventListener("keyup", function(){
+    let value = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#searchTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="page-title mb-1">Reports & Analytics</h2>
+        <small class="text-muted">Overview of system performance and usage</small>
+    </div>
+
+    <button class="btn btn-primary">
+        Export Report
+    </button>
+</div>
+
+
+<!-- ===================== STATS ===================== -->
+<div class="row g-4 mb-4">
+
+    <div class="col-md-4">
+        <div class="card-box d-flex justify-content-between align-items-center">
+            <div>
+                <small class="text-muted">Total Users</small>
+                <h3 class="fw-bold mb-0">{{ total_users }}</h3>
+            </div>
+            <div class="bg-primary text-white rounded-circle p-3">
+                👤
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-box d-flex justify-content-between align-items-center">
+            <div>
+                <small class="text-muted">Total Products</small>
+                <h3 class="fw-bold mb-0">{{ total_products }}</h3>
+            </div>
+            <div class="bg-success text-white rounded-circle p-3">
+                📦
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-box d-flex justify-content-between align-items-center">
+            <div>
+                <small class="text-muted">Active Tracking</small>
+                <h3 class="fw-bold mb-0">{{ total_tracking }}</h3>
+            </div>
+            <div class="bg-warning text-white rounded-circle p-3">
+                📊
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- ===================== SUMMARY ===================== -->
+<div class="card-box mb-4">
+
+    <h5 class="fw-bold mb-3">System Summary</h5>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="p-3 border rounded-3 h-100">
+                <h6 class="fw-semibold">Users Activity</h6>
+                <p class="text-muted small mb-0">
+                    Users are actively tracking product prices and receiving alerts based on their preferences.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-3 border rounded-3 h-100">
+                <h6 class="fw-semibold">Product Monitoring</h6>
+                <p class="text-muted small mb-0">
+                    Multiple products are monitored across different e-commerce platforms in real-time.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-3 border rounded-3 h-100">
+                <h6 class="fw-semibold">Automation System</h6>
+                <p class="text-muted small mb-0">
+                    Price updates and alerts are handled automatically using background processes.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================== QUICK INSIGHTS ===================== -->
+<div class="card-box">
+
+    <h5 class="fw-bold mb-3">Quick Insights</h5>
+
+    <ul class="list-group list-group-flush">
+
+        <li class="list-group-item d-flex justify-content-between">
+            Most tracked feature
+            <span class="fw-semibold">Price Alerts</span>
+        </li>
+
+        <li class="list-group-item d-flex justify-content-between">
+            System status
+            <span class="text-success fw-semibold">Operational</span>
+        </li>
+
+        <li class="list-group-item d-flex justify-content-between">
+            Data refresh rate
+            <span class="fw-semibold">Real-time</span>
+        </li>
+
+    </ul>
+
+</div>
+
+{% endblock %}

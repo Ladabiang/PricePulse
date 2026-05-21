@@ -1,0 +1,123 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h2 class="page-title mb-1">Price Tracking</h2>
+        <small class="text-muted">Monitor historical price changes across products</small>
+    </div>
+
+    <div class="d-flex gap-2">
+        <input type="text" id="historySearch" class="form-control" placeholder="Search..." style="max-width:220px;">
+        <button class="btn btn-primary">Export</button>
+    </div>
+</div>
+
+<!-- CARD -->
+<div class="card-box">
+
+    {# ✅ FIX: pagination safe check #}
+    {% if history.items %}
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle" id="historyTable">
+
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Website</th>
+                    <th>Price</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for h in history.items %}
+            <tr>
+
+                <!-- PRODUCT -->
+                <td>
+                    <div class="fw-semibold">
+                        {% if h.link and h.link.product %}
+                            {{ h.link.product.title }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </div>
+
+                    <small class="text-muted">ID: {{ h.id }}</small>
+                </td>
+
+                <!-- WEBSITE -->
+                <td>
+                    <span class="badge bg-light text-dark border">
+                        {{ h.link.website if h.link else "N/A" }}
+                    </span>
+                </td>
+
+                <!-- PRICE -->
+                <td class="fw-bold text-success">
+                    ₹{{ h.price }}
+                </td>
+
+                <!-- DATE -->
+                <td>
+                    {{ h.checked_at.strftime("%d %b %Y") if h.checked_at else "-" }}
+                </td>
+
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="d-flex justify-content-between mt-3">
+
+        {% if history.has_prev %}
+            <a href="?page={{ history.prev_num }}" class="btn btn-outline-primary">Previous</a>
+        {% else %}
+            <span></span>
+        {% endif %}
+
+        <span class="text-muted">
+            Page {{ history.page }} of {{ history.pages }}
+        </span>
+
+        {% if history.has_next %}
+            <a href="?page={{ history.next_num }}" class="btn btn-outline-primary">Next</a>
+        {% endif %}
+
+    </div>
+
+    {% else %}
+
+    <!-- EMPTY STATE -->
+    <div class="text-center py-5">
+        <h5 class="fw-bold">No Price History</h5>
+        <p class="text-muted">
+            Price tracking data will appear here once products are monitored.
+        </p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- SEARCH SCRIPT -->
+<script>
+document.getElementById("historySearch")?.addEventListener("keyup", function () {
+    let value = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#historyTable tbody tr");
+
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+    });
+});
+</script>
+
+{% endblock %}

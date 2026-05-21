@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PricePulse | Settings</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+
+/* ================= GLOBAL ================= */
+body{
+    font-family: Arial, sans-serif;
+    background:#e3e6e6;
+    margin:0;
+}
+
+/* ================= NAVBAR ================= */
+.navbar{
+    background:#081120;
+    padding:14px 20px;
+    color:#fff;
+}
+
+.brand{
+    font-size:26px;
+    font-weight:800;
+    color:#fff;
+    text-decoration:none;
+}
+
+.brand span{ color:#38bdf8; }
+
+/* ================= PAGE ================= */
+.page-container{
+    padding:30px;
+}
+
+.page-title{
+    font-size:26px;
+    font-weight:800;
+}
+
+.sub-title{
+    color:#6b7280;
+    font-size:14px;
+}
+
+/* ================= SETTINGS CARD ================= */
+.settings-card{
+    background:#fff;
+    border-radius:16px;
+    border:1px solid #ddd;
+    box-shadow:0 4px 14px rgba(0,0,0,0.06);
+    padding:20px;
+    margin-bottom:20px;
+}
+
+/* ================= LABEL ================= */
+.form-label{
+    font-weight:600;
+}
+
+/* ================= INPUT ================= */
+.form-control{
+    border-radius:10px;
+}
+
+/* ================= BUTTON ================= */
+.btn-primary{
+    background:#38bdf8;
+    border:none;
+    border-radius:10px;
+    font-weight:700;
+}
+
+.btn-primary:hover{
+    background:#0ea5e9;
+}
+
+/* ================= SWITCH ================= */
+.form-check-input:checked{
+    background-color:#38bdf8;
+    border-color:#38bdf8;
+}
+
+.section-title{
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div class="navbar d-flex justify-content-between align-items-center">
+
+    <a href="{{ url_for('web.dashboard') }}" class="brand">
+        Price<span>Pulse</span>
+    </a>
+
+    <div>
+        <a href="{{ url_for('web.dashboard') }}" class="text-white me-3">Dashboard</a>
+        <a href="{{ url_for('web.history') }}" class="text-white me-3">History</a>
+        <a href="{{ url_for('web.alerts') }}" class="text-white me-3">Alerts</a>
+        <a href="{{ url_for('web.saved') }}" class="text-white me-3">Saved</a>
+        <a href="{{ url_for('web.settings') }}" class="text-white me-3 fw-bold">Settings</a>
+    </div>
+
+</div>
+
+<!-- ================= PAGE ================= -->
+<div class="container page-container">
+
+    <!-- HEADER -->
+    <div class="mb-4">
+        <div class="page-title">Settings</div>
+        <div class="sub-title">Manage your account, preferences & notifications</div>
+    </div>
+
+    <!-- ================= PROFILE SETTINGS ================= -->
+    <div class="settings-card">
+
+        <div class="section-title">👤 Profile Settings</div>
+
+        <form method="POST" action="/update-profile">
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" name="username"
+                           value="{{ current_user.username }}">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email"
+                           value="{{ current_user.email }}">
+                </div>
+
+            </div>
+
+            <button class="btn btn-primary mt-3">
+                Save Changes
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- ================= NOTIFICATION SETTINGS ================= -->
+    <div class="settings-card">
+
+        <div class="section-title">🔔 Notification Settings</div>
+
+        <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" checked>
+            <label class="form-check-label">Email Alerts for Price Drops</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox">
+            <label class="form-check-label">Push Notifications</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" checked>
+            <label class="form-check-label">Weekly Summary Report</label>
+        </div>
+
+    </div>
+
+    <!-- ================= SECURITY ================= -->
+    <div class="settings-card">
+
+        <div class="section-title">🔐 Security</div>
+
+        <form method="POST" action="/change-password">
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" class="form-control" name="current_password">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">New Password</label>
+                    <input type="password" class="form-control" name="new_password">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" name="confirm_password">
+                </div>
+
+            </div>
+
+            <button class="btn btn-primary mt-3">
+                Update Password
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+{% include "components/footer.html" %}
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login | PricePulse</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+    radial-gradient(circle at top right,#2563eb25,transparent 25%),
+    radial-gradient(circle at bottom left,#7c3aed25,transparent 25%),
+    linear-gradient(135deg,#0f172a,#111827,#1e293b);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+}
+
+/* MAIN CARD */
+.login-shell{
+    width:100%;
+    max-width:1180px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:28px;
+    overflow:hidden;
+    backdrop-filter:blur(14px);
+    box-shadow:0 25px 60px rgba(0,0,0,.35);
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+}
+
+/* LEFT */
+.left-side{
+    padding:60px;
+    color:#fff;
+    position:relative;
+}
+
+.brand{
+    font-size:32px;
+    font-weight:800;
+    margin-bottom:35px;
+}
+
+.brand span{
+    color:#38bdf8;
+}
+
+.mini-badge{
+    display:inline-block;
+    padding:9px 16px;
+    border-radius:50px;
+    background:rgba(255,255,255,.10);
+    font-size:14px;
+    margin-bottom:22px;
+}
+
+.left-side h1{
+    font-size:54px;
+    line-height:1.05;
+    font-weight:800;
+    max-width:560px;
+}
+
+.left-side p{
+    color:#cbd5e1;
+    margin-top:22px;
+    font-size:17px;
+    line-height:1.8;
+    max-width:560px;
+}
+
+.stats-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-top:38px;
+}
+
+.stat-box{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.07);
+    padding:18px;
+    border-radius:18px;
+}
+
+.stat-box small{
+    color:#cbd5e1;
+}
+
+.stat-box h4{
+    margin-top:8px;
+    font-weight:800;
+}
+
+/* RIGHT */
+.right-side{
+    background:#ffffff;
+    padding:55px 42px;
+}
+
+.login-top{
+    margin-bottom:30px;
+}
+
+.login-title{
+    font-size:38px;
+    font-weight:800;
+    color:#111827;
+}
+
+.login-sub{
+    color:#6b7280;
+    margin-top:10px;
+}
+
+.form-label{
+    font-weight:700;
+    font-size:14px;
+    color:#111827;
+    margin-bottom:8px;
+}
+
+.form-control{
+    height:56px;
+    border-radius:15px;
+    border:1px solid #d1d5db;
+    padding-left:16px;
+}
+
+.form-control:focus{
+    box-shadow:none;
+    border-color:#2563eb;
+}
+
+.input-group-text{
+    background:#fff;
+    border-radius:0 15px 15px 0;
+    cursor:pointer;
+}
+
+.btn-login{
+    height:56px;
+    border:none;
+    border-radius:15px;
+    font-weight:700;
+    font-size:16px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+}
+
+.btn-login:hover{
+    opacity:.95;
+}
+
+.extra-links{
+    display:flex;
+    justify-content:space-between;
+    margin:14px 0 26px;
+    font-size:14px;
+}
+
+.extra-links a{
+    text-decoration:none;
+    font-weight:600;
+}
+
+.divider{
+    position:relative;
+    text-align:center;
+    margin:28px 0;
+    color:#9ca3af;
+    font-size:14px;
+}
+
+.divider:before,
+.divider:after{
+    content:"";
+    position:absolute;
+    top:50%;
+    width:38%;
+    height:1px;
+    background:#e5e7eb;
+}
+
+.divider:before{left:0;}
+.divider:after{right:0;}
+
+.register{
+    text-align:center;
+    color:#6b7280;
+}
+
+.register a{
+    text-decoration:none;
+    font-weight:700;
+    color:#2563eb;
+}
+
+.back-home{
+    margin-top:22px;
+    text-align:center;
+}
+
+.back-home a{
+    text-decoration:none;
+    color:#6b7280;
+    font-size:14px;
+}
+
+/* MOBILE */
+@media(max-width:991px){
+
+    .login-shell{
+        grid-template-columns:1fr;
+    }
+
+    .left-side{
+        display:none;
+    }
+
+}
+
+@media(max-width:576px){
+
+    .right-side{
+        padding:35px 24px;
+    }
+
+    .login-title{
+        font-size:30px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-shell">
+
+    <!-- LEFT SIDE -->
+    <div class="left-side">
+
+        <div class="brand">
+            Price<span>Pulse</span>
+        </div>
+
+        <span class="mini-badge">
+            🚀 AI Powered Price Intelligence
+        </span>
+
+        <h1>
+            Welcome Back.
+            Shop Smarter Again.
+        </h1>
+
+        <p>
+            Compare prices, predict future drops, receive instant alerts,
+            and manage your tracked products through one modern dashboard.
+        </p>
+
+        <div class="stats-row">
+
+            <div class="stat-box">
+                <small>Tracked Products</small>
+                <h4>12,480+</h4>
+            </div>
+
+            <div class="stat-box">
+                <small>Price Drops Today</small>
+                <h4>1,240</h4>
+            </div>
+
+            <div class="stat-box">
+                <small>Average Savings</small>
+                <h4>₹3,950</h4>
+            </div>
+
+            <div class="stat-box">
+                <small>Prediction Accuracy</small>
+                <h4>92%</h4>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right-side">
+
+        <div class="login-top">
+            <div class="login-title">Login</div>
+            <div class="login-sub">
+                Access your PricePulse dashboard.
+            </div>
+        </div>
+
+        <form method="POST">
+
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label">Password</label>
+
+                <div class="input-group">
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter password" required>
+
+                    <span class="input-group-text" onclick="togglePassword()">
+                        <i class="bi bi-eye" id="eyeIcon"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="extra-links">
+                <span></span>
+
+                <a href="{{ url_for('auth.forgot_password') }}">
+                    Forgot Password?
+                </a>
+            </div>
+
+            <button class="btn btn-primary btn-login w-100">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Login Now
+            </button>
+
+        </form>
+
+        <div class="divider">or</div>
+
+        <div class="register">
+            New to PricePulse?
+            <a href="{{ url_for('auth.register') }}">Create Account</a>
+        </div>
+
+        <div class="back-home">
+            <a href="/">← Back to Home</a>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SWEET ALERT -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+{% if category == "admin" %}
+
+Swal.fire({
+    icon: "success",
+    title: " Welcome Admin",
+    text: "Loading Admin Dashboard...",
+    timer: 1800,
+    showConfirmButton: false,
+    allowOutsideClick: false
+}).then(() => {
+    window.location.href = "/admin/";
+});
+
+{% elif category == "success" %}
+
+Swal.fire({
+    toast:true,
+    position:'top-end',
+    icon:'success',
+    title:"{{ message }}",
+    showConfirmButton:false,
+    timer:2500
+});
+
+{% else %}
+
+Swal.fire({
+    toast:true,
+    position:'top-end',
+    icon:'error',
+    title:"{{ message }}",
+    showConfirmButton:false,
+    timer:2500
+});
+
+{% endif %}
+
+{% endfor %}
+{% endif %}
+{% endwith %}
+</script>
+<!-- SHOW PASSWORD -->
+<script>
+function togglePassword(){
+    let pass = document.getElementById("password");
+    let eye = document.getElementById("eyeIcon");
+
+    if(pass.type === "password"){
+        pass.type = "text";
+        eye.classList.remove("bi-eye");
+        eye.classList.add("bi-eye-slash");
+    }else{
+        pass.type = "password";
+        eye.classList.remove("bi-eye-slash");
+        eye.classList.add("bi-eye");
+    }
+}
+</script>
+
+</body>
+</html>

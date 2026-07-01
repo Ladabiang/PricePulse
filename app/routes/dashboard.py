@@ -1,16 +1,51 @@
 from flask import Blueprint, render_template, request
-from app.models.product import Product
+from flask_login import login_required
 from sqlalchemy import and_
+import random
+
+from app.models.product import Product
+from app.scrapers.base_scraper import search_all_sites
+
 
 dashboard_bp = Blueprint("dashboard", __name__)
 
 
+# ==================================================
+# TRENDING SEARCH QUERIES
+# ==================================================
+TRENDING_QUERIES = [
+    #"iphone 16",
+    #"samsung galaxy s25",
+    #"oneplus 13",
+    #"gaming smartphone",
+    #"gaming laptop",
+    #"macbook air",
+    #"ultrabook laptop",
+    #"boat rockerz",
+    "wireless earbuds",
+    #"marshall speaker",
+    #"sony headphones",
+    "nike sneakers",
+    #"men oversized jacket",
+    "women handbag",
+    "playstation 5",
+    #"gaming mouse",
+    #"gaming keyboard",
+    #"air fryer",
+    "coffee machine",
+    #"smart blender",
+    #"smart watch",
+    #"fitness band",
+]
+
+
+# ==================================================
+# DASHBOARD
+# ==================================================
 @dashboard_bp.route("/dashboard")
+@login_required
 def dashboard():
 
-    # =========================
-    # GET FILTER VALUES
-    # =========================
     category = request.args.get("category")
     source = request.args.get("source")
     price_min = request.args.get("price_min", type=float)
@@ -18,87 +53,157 @@ def dashboard():
     sort = request.args.get("sort")
     drop_filter = request.args.get("drop_filter")
 
-    # =========================
-    # BASE QUERY
-    # =========================
-    query = Product.query
+    # ==================================================
+    # TRENDING PRODUCTS FROM LIVE SCRAPER
+    # ==================================================
+    products = []
 
-    # =========================
-    # BASIC FILTERS
-    # =========================
-    if category:
-        query = query.filter(Product.category == category)
+    selected_queries = random.sample(
+        TRENDING_QUERIES,
+        6
+    )
 
-    if source:
-        query = query.filter(Product.source == source)
+    for q in selected_queries:
 
-    if price_min is not None:
-        query = query.filter(Product.price >= price_min)
+        try:
+            items = search_all_sites(q) or []
 
-    if price_max is not None:
-        query = query.filter(Product.price <= price_max)
+            for item in items[:2]:
 
-    # =========================
-    # PRICE DROP SAFE LOGIC
-    # =========================
-    safe_drop_expr = None
+                if not isinstance(item, dict):
+                    continue
 
-    if drop_filter:
+                title = item.get("title") or item.get("product_name") or ""
+                price = float(item.get("price") or 0)
+                image = item.get("image") or "https://via.placeholder.com/300?text=No+Image"
+                url = item.get("url") or item.get("product_url") or ""
+                website = item.get("website") or item.get("site") or "Unknown"
+                raw_rating = str(
+                    item.get("rating") or "0"
+                )
 
-        # prevent NULL + division by zero
-        safe_drop_expr = and_(
-            Product.old_price.isnot(None),
-            Product.old_price > 0,
-            Product.price.isnot(None)
-        )
+                try:
+                    rating_value = float(
+                        re.findall(
+                            r"\d+\.?\d*",
+                            raw_rating
+                        )[0]
+                    )
+                except:
+                    rating_value = 0
+                reviews = item.get("reviews") or 0
 
-        query = query.filter(safe_drop_expr)
+                if not title or price <= 0 or not url:
+                    continue
 
-        if drop_filter == "drop_only":
-            query = query.filter(Product.old_price > Product.price)
+                products.append({
+                    "product_name": title,
+                    "title": title,
+                    "price": price,
+                    "old_price": price,
+                    "image": image,
+                    "product_url": url,
+                    "url": url,
+                    "website": website,
+                    "rating": rating,
+                    "reviews": reviews,
+                    "price_drop_detected": False,
+                    "drop_percent": 0,
+                })
 
-        elif drop_filter == "drop_5":
-            query = query.filter(
-                (Product.old_price - Product.price) / Product.old_price >= 0.05
+        except Exception as e:
+            print("TRENDING PRODUCT ERROR:", e)
+            continue
+
+    random.shuffle(products)
+    products = products[:12]
+
+    # ==================================================
+    # FALLBACK: DATABASE PRODUCTS IF SCRAPER RETURNS EMPTY
+    # ==================================================
+    if not products:
+
+        query = Product.query
+
+        if category:
+            query = query.filter(Product.category == category)
+
+        if source:
+            query = query.filter(Product.source == source)
+
+        if price_min is not None:
+            query = query.filter(Product.price >= price_min)
+
+        if price_max is not None:
+            query = query.filter(Product.price <= price_max)
+
+        if drop_filter:
+
+            safe_drop_expr = and_(
+                Product.old_price.isnot(None),
+                Product.old_price > 0,
+                Product.price.isnot(None)
             )
 
-        elif drop_filter == "drop_10":
-            query = query.filter(
-                (Product.old_price - Product.price) / Product.old_price >= 0.10
+            query = query.filter(safe_drop_expr)
+
+            if drop_filter == "drop_only":
+                query = query.filter(Product.old_price > Product.price)
+
+            elif drop_filter == "drop_5":
+                query = query.filter(
+                    (Product.old_price - Product.price) / Product.old_price >= 0.05
+                )
+
+            elif drop_filter == "drop_10":
+                query = query.filter(
+                    (Product.old_price - Product.price) / Product.old_price >= 0.10
+                )
+
+        if sort == "price_asc":
+            query = query.order_by(Product.price.asc())
+
+        elif sort == "price_desc":
+            query = query.order_by(Product.price.desc())
+
+        elif sort == "rating":
+            query = query.order_by(Product.rating.desc())
+
+        elif sort == "updated":
+            query = query.order_by(Product.updated_at.desc())
+
+        elif sort == "drop":
+            query = query.order_by(
+                (Product.old_price - Product.price).desc()
             )
 
-    # =========================
-    # SORTING
-    # =========================
-    if sort == "price_asc":
-        query = query.order_by(Product.price.asc())
+        else:
+            query = query.order_by(Product.updated_at.desc())
 
-    elif sort == "price_desc":
-        query = query.order_by(Product.price.desc())
+        db_products = query.limit(12).all()
 
-    elif sort == "rating":
-        query = query.order_by(Product.rating.desc())
+        for p in db_products:
 
-    elif sort == "updated":
-        query = query.order_by(Product.updated_at.desc())
+            products.append({
+                "product_name": p.title,
+                "title": p.title,
+                "price": p.price,
+                "old_price": p.old_price or p.price,
+                "image": p.image,
+                "product_url": p.url,
+                "url": p.url,
+                "website": p.source or "Unknown",
+                "rating": getattr(p, "rating", 0) or 0,
+                "reviews": getattr(p, "reviews", 0) or 0,
+                "price_drop_detected": (
+                    p.old_price and p.price and p.old_price > p.price
+                ),
+                "drop_percent": 0,
+            })
 
-    elif sort == "drop":
-        query = query.order_by(
-            (Product.old_price - Product.price).desc()
-        )
-
-    else:
-        # default sort (important for UX)
-        query = query.order_by(Product.updated_at.desc())
-
-    # =========================
-    # FETCH DATA
-    # =========================
-    products = query.limit(50).all()
-
-    # =========================
-    # STATS (OPTIMIZED + SAFE)
-    # =========================
+    # ==================================================
+    # STATS
+    # ==================================================
     total_products = Product.query.count()
 
     price_drops = Product.query.filter(
@@ -107,16 +212,20 @@ def dashboard():
         Product.old_price > Product.price
     ).count()
 
-    # TODO: replace this later with real alerts table
-    active_alerts = 87
+    active_alerts = 0
 
-    # =========================
+    # ==================================================
     # RENDER
-    # =========================
+    # ==================================================
     return render_template(
         "dashboard.html",
         products=products,
         total_products=total_products,
         price_drops=price_drops,
-        active_alerts=active_alerts
+        active_alerts=active_alerts,
+        tracked=total_products,
+        alerts=active_alerts,
+        drops=price_drops,
+        savings=0,
+        deal_filter="all"
     )

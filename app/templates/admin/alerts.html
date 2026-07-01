@@ -8,18 +8,11 @@
         <h2 class="page-title mb-1">Alerts & Notifications</h2>
         <p class="text-muted m-0">Monitor user price alerts and tracking status</p>
     </div>
-
-    <div>
-        <button class="btn btn-primary btn-sm">
-            + Create Alert
-        </button>
-    </div>
 </div>
 
 <!-- Alerts Card -->
 <div class="card-box">
 
-    <!-- 🔥 FIX: use alerts.items instead of alerts|length -->
     {% if alerts.items %}
 
     <div class="table-responsive">
@@ -42,25 +35,25 @@
                 <!-- USER -->
                 <td>
                     <strong>
-                        {{ alert.user.username if alert.user else "Unknown User" }}
+                        {{ alert.user.username if alert.user else alert.user_id }}
                     </strong>
                 </td>
 
                 <!-- PRODUCT -->
                 <td>
                     <div class="fw-semibold">
-                        {{ alert.product.title if alert.product else "N/A" }}
+                        {{ alert.product_name }}
                     </div>
 
                     <small class="text-muted">
-                        {{ alert.product.website if alert.product and alert.product.website else "" }}
+                        {{ alert.website }}
                     </small>
                 </td>
 
                 <!-- TARGET PRICE -->
                 <td>
                     <span class="fw-bold text-primary">
-                        ₹{{ alert.target_price }}
+                        Rs.{{ alert.target_price }}
                     </span>
                 </td>
 

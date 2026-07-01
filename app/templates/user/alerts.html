@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>PricePulse | Alerts Center</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -12,81 +11,299 @@
 <style>
 
 body{
-    font-family: 'Poppins', sans-serif;
-    background:#e3e6e6;
+    font-family:Arial,sans-serif;
+    background:#f3f4f6;
     margin:0;
+    color:#111827;
 }
 
-/* NAVBAR */
+/* ==================================================
+NAVBAR
+================================================== */
+
 .navbar{
     background:#081120;
-    padding:14px 20px;
-    color:#fff;
+    padding:16px 28px;
 }
 
 .brand{
-    font-size:28px;
+    font-size:30px;
     font-weight:800;
     color:#fff;
     text-decoration:none;
 }
-.brand span{ color:#38bdf8; }
 
-/* PAGE */
+.brand span{
+    color:#38bdf8;
+}
+
+.logout-btn{
+    margin-left:12px;
+    padding:8px 14px;
+    border-radius:10px;
+
+    border:1px solid #38bdf8;
+    color:#38bdf8;
+    background:transparent;
+
+    font-weight:600;
+    transition:all 0.25s ease;
+}
+
+.logout-btn:hover{
+    background:#38bdf8;
+    color:#081120;
+}
+
+.nav-link-custom{
+    color:#e5e7eb !important;
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:600;
+    transition:0.25s ease;
+}
+
+.nav-link-custom:hover{
+    color:#38bdf8 !important;
+}
+
+.nav-link-custom.active{
+    color:#38bdf8 !important;
+}
+
+/* ==================================================
+PAGE
+================================================== */
+
 .page-container{
-    padding:30px;
+    padding:35px 25px;
+}
+
+.header-card{
+    background:#fff;
+    border-radius:22px;
+    padding:28px;
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .page-title{
-    font-size:26px;
+    font-size:30px;
     font-weight:800;
 }
 
 .sub-title{
-    color:#6b7280;
-    font-size:14px;
+    color:#64748b;
+    margin-top:5px;
 }
 
-/* TABLE CARD */
-.table-card{
-    background:#fff;
-    border-radius:16px;
-    border:1px solid #e5e7eb;
-    overflow:hidden;
-}
-
-/* STATUS BADGES */
-.badge-pending{
-    background:#fef3c7;
-    color:#92400e;
-    padding:6px 10px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:600;
-}
-
-.badge-triggered{
+.count-badge{
     background:#fee2e2;
+    color:#dc2626;
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:800;
+}
+
+/* ==================================================
+ALERT GRID
+================================================== */
+
+.alert-grid{
+    margin-top:30px;
+}
+
+.alert-card{
+    background:#fff;
+    border-radius:22px;
+    padding:20px;
+
+    border:1px solid #e5e7eb;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+
+    transition:.25s;
+    height:100%;
+}
+
+.alert-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 20px 45px rgba(0,0,0,.12);
+}
+
+.alert-top{
+    display:flex;
+    gap:15px;
+}
+
+.alert-img{
+    width:90px;
+    height:90px;
+    object-fit:contain;
+
+    background:#f9fafb;
+
+    border-radius:16px;
+    padding:8px;
+}
+
+.product-title{
+    font-size:15px;
+    font-weight:800;
+    line-height:1.5;
+}
+
+.site-badge{
+    display:inline-block;
+
+    background:#111827;
+    color:#fff;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    font-size:12px;
+    font-weight:700;
+
+    margin-top:8px;
+}
+
+/* ==================================================
+ALERT MESSAGE
+================================================== */
+
+.alert-message{
+    margin-top:16px;
+
+    background:#fef2f2;
     color:#991b1b;
-    padding:6px 10px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:600;
+
+    border-left:5px solid #ef4444;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    font-weight:700;
 }
 
-.badge-disabled{
-    background:#e5e7eb;
-    color:#374151;
-    padding:6px 10px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:600;
+/* ==================================================
+PRICE BOX
+================================================== */
+
+.price-box{
+    margin-top:15px;
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
 }
 
-/* EMPTY */
-.empty{
+.price-item{
+    background:#f9fafb;
+
+    border-radius:14px;
+    padding:12px;
+}
+
+.price-label{
+    font-size:12px;
+    color:#64748b;
+    font-weight:700;
+}
+
+.price-value{
+    font-size:20px;
+    font-weight:900;
+}
+
+/* ==================================================
+META
+================================================== */
+
+.meta{
+    margin-top:12px;
+    font-size:13px;
+    color:#64748b;
+}
+
+/* ==================================================
+BUTTONS
+================================================== */
+
+.actions{
+    margin-top:18px;
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+}
+
+.btn-view{
+    background:#111827;
+    color:#fff;
+
+    border-radius:12px;
+
+    padding:10px;
+
     text-align:center;
-    padding:60px 20px;
+    text-decoration:none;
+
+    font-weight:800;
+}
+
+.btn-view:hover{
+    background:#1f2937;
+    color:#fff;
+}
+
+.btn-stop{
+    background:#fff;
+    color:#ef4444;
+
+    border:1px solid #ef4444;
+
+    border-radius:12px;
+
+    padding:10px;
+    width:100%;
+
+    font-weight:800;
+}
+
+.btn-stop:hover{
+    background:#ef4444;
+    color:#fff;
+}
+
+/* ==================================================
+EMPTY STATE
+================================================== */
+
+.empty{
+    margin-top:35px;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    padding:80px 25px;
+
+    text-align:center;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+}
+
+.empty i{
+    font-size:54px;
+    color:#38bdf8;
 }
 
 </style>
@@ -94,7 +311,10 @@ body{
 
 <body>
 
-<!-- NAVBAR -->
+<!-- ==================================================
+NAVBAR
+================================================== -->
+
 <div class="navbar d-flex justify-content-between align-items-center">
 
     <a href="{{ url_for('web.dashboard') }}" class="brand">
@@ -102,125 +322,217 @@ body{
     </a>
 
     <div>
-        <a href="{{ url_for('web.dashboard') }}" class="text-white me-3">Dashboard</a>
-        <a href="{{ url_for('web.history') }}" class="text-white me-3">History</a>
-        <a href="{{ url_for('web.alerts') }}" class="text-white me-3 fw-bold">Alerts</a>
-        <a href="{{ url_for('web.saved') }}" class="text-white me-3">Saved</a>
+        <a href="{{ url_for('web.dashboard') }}" class="nav-link-custom">
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('web.history') }}" class="nav-link-custom">
+            History
+        </a>
+
+        <a href="{{ url_for('web.alerts') }}" class="nav-link-custom active">
+            Alerts
+        </a>
+
+        <a href="{{ url_for('web.saved') }}" class="nav-link-custom">
+            Saved
+        </a>
     </div>
+
+    <a href="{{ url_for('auth.logout') }}"
+       class="logout-btn text-decoration-none">
+
+        Logout
+
+    </a>
 
 </div>
 
-<!-- PAGE -->
+<!-- ==================================================
+CONTENT
+================================================== -->
+
 <div class="container page-container">
 
-    <!-- HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="header-card">
 
         <div>
-            <div class="page-title">Alerts Center</div>
-            <div class="sub-title">Monitor price targets in real time</div>
+            <div class="page-title">
+                Alerts Center
+            </div>
+
+            <div class="sub-title">
+                Real-time product price notifications
+            </div>
         </div>
 
-        <span class="badge bg-primary">
+        <div class="count-badge">
             {{ alerts|length }} Alerts
-        </span>
+        </div>
 
     </div>
 
-    <!-- EMPTY -->
     {% if alerts|length == 0 %}
 
-        <div class="empty">
-            <h5>No alerts found</h5>
-            <p class="text-muted">Create alerts to get notified when prices drop</p>
-        </div>
+    <!-- EMPTY -->
+
+    <div class="empty">
+
+        <i class="bi bi-bell-slash"></i>
+
+        <h4 class="mt-3">
+            No price alerts yet
+        </h4>
+
+        <p class="text-muted">
+            Alerts will appear when product prices change.
+        </p>
+
+        <a href="{{ url_for('web.history') }}"
+           class="btn btn-primary mt-2">
+
+            View Tracked Products
+
+        </a>
+
+    </div>
 
     {% else %}
 
-    <!-- TABLE -->
-    <div class="table-card">
+    <!-- ALERT GRID -->
 
-        <div class="table-responsive">
+    <div class="row alert-grid g-4">
 
-            <table class="table align-middle mb-0">
+        {% for item in alerts %}
 
-                <thead class="table-dark">
-                    <tr>
-                        <th>Product</th>
-                        <th>Target Price</th>
-                        <th>Current Price</th>
-                        <th>Status</th>
-                        <th>Created</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
+        <div class="col-lg-4 col-md-6">
 
-                <tbody>
+            <div class="alert-card">
 
-                    {% for a in alerts %}
-                    <tr>
+                <!-- TOP -->
 
-                        <!-- PRODUCT -->
-                        <td>
-                            <strong>{{ a.product.title if a.product else "Unknown" }}</strong>
-                        </td>
+                <div class="alert-top">
 
-                        <!-- TARGET -->
-                        <td>₹{{ a.target_price }}</td>
+                    <img class="alert-img"
+                         src="{{ item.image or 'https://via.placeholder.com/300?text=No+Image' }}">
 
-                        <!-- CURRENT -->
-                        <td>
-                            ₹{{ a.current_price if a.current_price else "—" }}
-                        </td>
+                    <div>
 
-                        <!-- STATUS -->
-                        <td>
-                            {% if a.status == "pending" %}
-                                <span class="badge-pending">Pending 🟡</span>
+                        <div class="product-title">
+                            {{ item.product_name }}
+                        </div>
 
-                            {% elif a.status == "triggered" %}
-                                <span class="badge-triggered">Triggered 🔥</span>
+                        <span class="site-badge">
+                            {{ item.website }}
+                        </span>
 
-                            {% else %}
-                                <span class="badge-disabled">Disabled ⚫</span>
-                            {% endif %}
-                        </td>
+                    </div>
 
-                        <!-- CREATED -->
-                        <td class="text-muted">
-                            {{ a.created_at.strftime('%d %b %Y') if a.created_at else "-" }}
-                        </td>
+                </div>
 
-                        <!-- ACTION -->
-                        <td>
+                <!-- ALERT MESSAGE -->
 
-                            <!-- VIEW PRODUCT -->
-                            <a href="{{ url_for('web.product_detail', product_id=a.product_id) }}"
-                               class="btn btn-sm btn-outline-dark">
-                                View
-                            </a>
+                <div class="alert-message">
 
-                            <!-- DISABLE ALERT -->
-                            <form method="POST"
-                                  action="/disable-alert/{{ a.id }}"
-                                  style="display:inline;">
+                    {% if item.old_price and item.price < item.old_price %}
 
-                                <button class="btn btn-sm btn-danger">
-                                    Disable
-                                </button>
+                        <i class="bi bi-arrow-down-circle"></i>
 
-                            </form>
+                        Price dropped from
+                        ₹{{ item.old_price }}
+                        to
+                        ₹{{ item.price }}
 
-                        </td>
+                    {% elif item.old_price and item.price > item.old_price %}
 
-                    </tr>
-                    {% endfor %}
+                        <i class="bi bi-arrow-up-circle"></i>
 
-                </tbody>
+                        Price increased from
+                        ₹{{ item.old_price }}
+                        to
+                        ₹{{ item.price }}
 
-            </table>
+                    {% else %}
+
+                        <i class="bi bi-bell"></i>
+
+                        Price updated successfully
+
+                    {% endif %}
+
+                </div>
+
+                <!-- PRICE -->
+
+                <div class="price-box">
+
+                    <div class="price-item">
+
+                        <div class="price-label">
+                            Current Price
+                        </div>
+
+                        <div class="price-value">
+                            ₹{{ item.price }}
+                        </div>
+
+                    </div>
+
+                    <div class="price-item">
+
+                        <div class="price-label">
+                            Previous Price
+                        </div>
+
+                        <div class="price-value">
+                            ₹{{ item.old_price or item.price }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- META -->
+
+                <div class="meta">
+
+                    <i class="bi bi-clock"></i>
+
+                    Last checked:
+
+                    {{ item.last_checked.strftime('%d %b %Y, %I:%M %p') if item.last_checked else 'Not checked yet' }}
+
+                </div>
+
+                <!-- BUTTONS -->
+
+                <div class="actions">
+
+                    <a href="{{ url_for('web.product_detail', product_id=item.product_id) }}"
+                       class="btn-view">
+
+                        View Details
+
+                    </a>
+
+                    <form method="POST"
+                          action="{{ url_for('web.toggle_tracking', tracked_id=item.id) }}">
+
+                        <button type="submit" class="btn-stop">
+
+                            Stop Tracking
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
+
+        {% endfor %}
 
     </div>
 
@@ -228,8 +540,9 @@ body{
 
 </div>
 
-<!-- FOOTER -->
 {% include "components/footer.html" %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

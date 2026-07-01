@@ -9,15 +9,15 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-
-/* ================= GLOBAL ================= */
 body{
-    font-family: Arial, sans-serif;
-    background:#e3e6e6;
+    font-family: Inter, Arial, sans-serif;
+    background:#f1f5f9;
     margin:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
 }
 
-/* ================= NAVBAR ================= */
 .navbar{
     background:#081120;
     padding:14px 20px;
@@ -31,29 +31,64 @@ body{
     text-decoration:none;
 }
 .brand span{ color:#38bdf8; }
+.logout-btn{
+    margin-left:12px;
+    padding:8px 14px;
+    border-radius:10px;
 
-/* ================= PAGE ================= */
+    border:1px solid #38bdf8;
+    color:#38bdf8;
+    background:transparent;
+
+    font-weight:600;
+    transition: all 0.25s ease;
+}
+
+.logout-btn:hover{
+    background:#38bdf8;
+    color:#081120;
+}
+
+.nav-link-custom{
+    color:#e5e7eb !important;
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:600;
+    transition:0.25s ease;
+}
+
+.nav-link-custom:hover{
+    color:#38bdf8 !important;
+}
+
+.nav-link-custom.active{
+    color:#38bdf8 !important;
+}
+
 .page-container{
-    padding:30px;
+    flex:1;
+    padding:40px 20px;
+    max-width:1400px;
 }
 
 .page-title{
-    font-size:26px;
+    font-size:28px;
     font-weight:800;
+    color:#0f172a;
 }
 
 .sub-title{
-    color:#6b7280;
+    color:#64748b;
     font-size:14px;
 }
 
-/* ================= TABLE ================= */
 .table-card{
     margin-top:25px;
     background:#fff;
-    border-radius:16px;
+    border-radius:22px;
     overflow:hidden;
-    border:1px solid #ddd;
+    border:1px solid #e2e8f0;
+    box-shadow:0 8px 25px rgba(15,23,42,0.08);
 }
 
 .table thead{
@@ -61,76 +96,133 @@ body{
     color:#fff;
 }
 
-.table tbody tr:hover{
-    background:#f1f5f9;
+.table tbody tr{
+    transition:0.2s ease;
 }
 
-/* ================= PRODUCT ================= */
+.table tbody tr:hover{
+    background:#f8fafc;
+}
+
+.table td,
+.table th{
+    padding:20px 16px;
+    vertical-align:middle;
+}
+
 .product{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:14px;
 }
 
 .product img{
-    width:50px;
-    height:50px;
-    border-radius:10px;
-    border:1px solid #ddd;
+    width:78px;
+    height:78px;
+    object-fit:cover;
+    border-radius:16px;
+    border:1px solid #e2e8f0;
+    background:#fff;
+    padding:5px;
 }
 
-/* ================= STATUS ================= */
+.product-title{
+    font-weight:700;
+    font-size:15px;
+    line-height:1.4;
+    color:#0f172a;
+
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+
+    overflow:hidden;
+    max-width:520px;
+}
+
 .active{
     background:#dcfce7;
     color:#16a34a;
-    padding:5px 10px;
+    padding:6px 12px;
     border-radius:999px;
     font-size:12px;
-    font-weight:600;
+    font-weight:700;
 }
 
 .stopped{
     background:#f3f4f6;
     color:#6b7280;
-    padding:5px 10px;
+    padding:6px 12px;
     border-radius:999px;
     font-size:12px;
+    font-weight:700;
+}
+
+.action-btn{
+    border-radius:10px;
+    padding:7px 14px;
+    font-size:13px;
     font-weight:600;
 }
 
-/* ================= EMPTY ================= */
 .empty{
     text-align:center;
-    padding:60px 20px;
+    padding:70px 20px;
+    background:#fff;
+    border-radius:22px;
+    border:1px solid #e2e8f0;
+    box-shadow:0 8px 25px rgba(15,23,42,0.08);
 }
 
+@media(max-width:768px){
+    .table td,
+    .table th{
+        padding:14px 10px;
+    }
+
+    .product{
+        align-items:flex-start;
+    }
+
+    .product img{
+        width:60px;
+        height:60px;
+    }
+
+    .product-title{
+        max-width:220px;
+        font-size:14px;
+    }
+
+    .page-title{
+        font-size:22px;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
 <div class="navbar d-flex justify-content-between align-items-center">
-
     <a href="{{ url_for('web.dashboard') }}" class="brand">
         Price<span>Pulse</span>
     </a>
 
     <div>
-        <a href="{{ url_for('web.dashboard') }}" class="text-white me-3">Dashboard</a>
-        <a href="{{ url_for('web.history') }}" class="text-white me-3 fw-bold">History</a>
-        <a href="{{ url_for('web.alerts') }}" class="text-white me-3">Alerts</a>
-        <a href="{{ url_for('web.saved') }}" class="text-white me-3">Saved</a>
+        <a href="{{ url_for('web.dashboard') }}" class="nav-link-custom">Dashboard</a>
+        <a href="{{ url_for('web.history') }}" class="nav-link-custom">History</a>
+        <a href="{{ url_for('web.alerts') }}" class="nav-link-custom">Alerts</a>
+        <a href="{{ url_for('web.saved') }}" class="nav-link-custom">Saved</a>
     </div>
 
+     <a href="{{ url_for('auth.logout') }}" class="logout-btn text-decoration-none">
+                Logout
+    </a>
 </div>
 
-<!-- ================= PAGE ================= -->
 <div class="container page-container">
 
-    <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-
         <div>
             <div class="page-title">Tracking History</div>
             <div class="sub-title">All tracked products activity</div>
@@ -139,30 +231,25 @@ body{
         <span class="badge bg-primary">
             {{ products|length }} Products
         </span>
-
     </div>
 
-    <!-- EMPTY STATE -->
     {% if products|length == 0 %}
 
         <div class="empty">
             <h5>No tracking history found</h5>
             <p class="text-muted">Start tracking products from dashboard</p>
 
-            <a href="{{ url_for('web.dashboard') }}" class="btn btn-primary">
+            <a href="{{ url_for('web.dashboard') }}" class="btn btn-primary action-btn">
                 Go to Dashboard
             </a>
         </div>
 
     {% else %}
 
-    <!-- TABLE -->
     <div class="table-card">
-
         <div class="table-responsive">
 
             <table class="table align-middle mb-0">
-
                 <thead>
                     <tr>
                         <th>Product</th>
@@ -176,38 +263,35 @@ body{
                 </thead>
 
                 <tbody>
-
                     {% for p in products %}
                     <tr>
-
-                        <!-- PRODUCT -->
                         <td>
                             <div class="product">
-
-                                <img src="{{ p.image if p.image else 'https://via.placeholder.com/50' }}">
+                                <img src="{{ p.image or p.product.image or 'https://via.placeholder.com/80' }}" alt="Product">
 
                                 <div>
-                                    <strong>{{ p.product_name }}</strong><br>
+                                    <div class="product-title">
+                                        {{ p.product_name }}
+                                    </div>
                                     <small class="text-muted">ID: {{ p.id }}</small>
                                 </div>
-
                             </div>
                         </td>
 
-                        <!-- WEBSITE -->
                         <td>
                             <span class="badge bg-light text-dark border">
                                 {{ p.website }}
                             </span>
                         </td>
 
-                        <!-- PRICE -->
-                        <td><strong>₹{{ p.price }}</strong></td>
+                        <td>
+                            <strong>₹{{ p.price }}</strong>
+                        </td>
 
-                        <!-- TARGET -->
-                        <td class="text-muted">₹{{ p.target_price }}</td>
+                        <td class="text-muted">
+                            ₹{{ p.target_price }}
+                        </td>
 
-                        <!-- STATUS -->
                         <td>
                             {% if p.is_active %}
                                 <span class="active">Active</span>
@@ -216,44 +300,34 @@ body{
                             {% endif %}
                         </td>
 
-                        <!-- LAST CHECKED -->
                         <td class="text-muted">
                             {{ p.last_checked.strftime("%d %b %Y") if p.last_checked else "—" }}
                         </td>
 
-                        <!-- ACTION -->
                         <td>
-
                             <a href="{{ p.product_url }}"
                                target="_blank"
-                               class="btn btn-sm btn-outline-dark">
+                               class="btn btn-sm btn-outline-dark action-btn">
                                 View
                             </a>
 
-                            <!-- 🔥 FIXED ROUTE PARAM -->
                             <a href="{{ url_for('web.product_detail', product_id=p.product_id) }}"
-                               class="btn btn-sm btn-primary">
+                               class="btn btn-sm btn-primary action-btn">
                                 Details
                             </a>
-
                         </td>
-
                     </tr>
                     {% endfor %}
-
                 </tbody>
-
             </table>
 
         </div>
-
     </div>
 
     {% endif %}
 
 </div>
 
-<!-- ================= FOOTER ================= -->
 {% include "components/footer.html" %}
 
 </body>

@@ -11,14 +11,16 @@
 
     <div class="d-flex gap-2">
         <input type="text" id="historySearch" class="form-control" placeholder="Search..." style="max-width:220px;">
-        <button class="btn btn-primary">Export</button>
+        <a href="{{ url_for('admin.export_price_history') }}"
+            class="btn btn-primary">
+                Export
+        </a>
     </div>
 </div>
 
 <!-- CARD -->
 <div class="card-box">
 
-    {# ✅ FIX: pagination safe check #}
     {% if history.items %}
 
     <div class="table-responsive">

@@ -5,6 +5,7 @@ import logging
 import time
 import re
 import json
+import random
 
 logger = logging.getLogger("shopclues")
 
@@ -101,7 +102,7 @@ def extract_image(item):
 
 
 # ==================================================
-# ⭐ RATING + REVIEWS EXTRACTOR (NEW FIX)
+# RATING + REVIEWS EXTRACTOR (NEW FIX)
 # ==================================================
 def extract_rating_reviews(item):
 
@@ -184,6 +185,7 @@ def search_shopclues(product):
 
             browser = p.chromium.launch(
                 headless=True,
+                slow_mo=0,
                 args=["--no-sandbox"]
             )
 
@@ -196,16 +198,48 @@ def search_shopclues(product):
                 )
             )
 
+            context.add_init_script("""
+
+                Object.defineProperty(navigator, 'webdriver', {
+                    get: () => undefined
+                });
+
+                window.chrome = {
+                    runtime: {}
+                };
+
+                Object.defineProperty(navigator, 'plugins', {
+                    get: () => [1,2,3,4,5]
+                });
+
+                Object.defineProperty(navigator, 'languages', {
+                    get: () => ['en-US', 'en']
+                });
+
+                """)
+
             page = context.new_page()
+            page.set_default_timeout(8000)
 
-            page.goto(url, timeout=60000, wait_until="domcontentloaded")
+            page.goto(
+                url,
+                timeout=15000,
+                wait_until="domcontentloaded"
+            )
 
-            time.sleep(4)
+            page.wait_for_timeout(1000)
 
-            for _ in range(3):
-                page.mouse.wheel(0, 3000)
-                time.sleep(1.5)
+            for _ in range(1):
 
+                page.mouse.wheel(
+                    0,
+                    random.randint(1500, 3000)
+                )
+
+                time.sleep(
+                    random.uniform(1, 3)
+                )
+            page.wait_for_timeout(1000)
             html = page.content()
             browser.close()
 
@@ -257,7 +291,6 @@ def search_shopclues(product):
 
                 image = extract_image(item)
 
-                # ⭐⭐⭐ FIXED HERE ⭐⭐⭐
                 rating, reviews = extract_rating_reviews(item)
 
                 results.append({

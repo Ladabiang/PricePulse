@@ -1,263 +1,182 @@
 [
     {
-        "title": "Joker & Witch",
-        "price": 999,
-        "image": "https://m.media-amazon.com/images/I/61yL1DY-pNL._AC_UL320_.jpg",
-        "rating": 3.7,
+        "title": "Apple",
+        "price": 59900,
+        "image": "https://m.media-amazon.com/images/I/61FMZ9rSZUL._AC_UY218_.jpg",
+        "rating": 4.5,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BBFH9LV7",
+        "url": "https://www.amazon.in/dp/B0DXQH1DBS",
         "website": "Amazon"
     },
     {
-        "title": "Joker & Witch",
-        "price": 695,
-        "image": "https://m.media-amazon.com/images/I/61XrOq6jOOL._AC_UL320_.jpg",
-        "rating": 4.0,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BBFJLYBP",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 999,
-        "image": "https://m.media-amazon.com/images/I/617X4Wc0B1L._AC_UL320_.jpg",
-        "rating": 3.4,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BBFGSQLR",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 779,
-        "image": "https://m.media-amazon.com/images/I/615H72KbbGL._AC_UL320_.jpg",
-        "rating": 3.7,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BBFK5V56",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 759,
-        "image": "https://m.media-amazon.com/images/I/61UTf1uvl9L._AC_UL320_.jpg",
-        "rating": 3.9,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B07MXFXDMB",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 639,
-        "image": "https://m.media-amazon.com/images/I/61llZ5Jd6aL._AC_UL320_.jpg",
-        "rating": 4.0,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B07YKMCS7H",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 674,
-        "image": "https://m.media-amazon.com/images/I/61cLyhf3jSL._AC_UL320_.jpg",
-        "rating": 4.0,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B08SM8FSB4",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 759,
-        "image": "https://m.media-amazon.com/images/I/61K7jDzRhuL._AC_UL320_.jpg",
-        "rating": 3.8,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BD93MKBM",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 759,
-        "image": "https://m.media-amazon.com/images/I/61ylDPTCmFL._AC_UL320_.jpg",
-        "rating": 4.0,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BPMBLN32",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 1499,
-        "image": "https://m.media-amazon.com/images/I/715u6tQZuPL._AC_UL320_.jpg",
-        "rating": 4.0,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0DQL7ZD1G",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 639,
-        "image": "https://m.media-amazon.com/images/I/61dNmJ-Fe+L._AC_UL320_.jpg",
+        "title": "Apple",
+        "price": 64900,
+        "image": "https://m.media-amazon.com/images/I/61ULimPWODL._AC_UY218_.jpg",
         "rating": 4.2,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BJ79QP4P",
+        "url": "https://www.amazon.in/dp/B0GQVL6STN",
         "website": "Amazon"
     },
     {
-        "title": "Joker & Witch",
-        "price": 759,
-        "image": "https://m.media-amazon.com/images/I/61BFWE-zjnL._AC_UL320_.jpg",
-        "rating": 4.0,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BPM8JVR1",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 999,
-        "image": "https://m.media-amazon.com/images/I/61sVfj7IOYL._AC_UL320_.jpg",
+        "title": "Google",
+        "price": 64983,
+        "image": "https://m.media-amazon.com/images/I/516HIUddM3L._AC_UY218_.jpg",
         "rating": 4.2,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BBFJ54J1",
+        "url": "https://www.amazon.in/dp/B0FNPNL2D8",
         "website": "Amazon"
     },
     {
-        "title": "Casio",
-        "price": 1894,
-        "image": "https://m.media-amazon.com/images/I/61ybeKQto8L._AC_UL320_.jpg",
+        "title": "Apple",
+        "price": 154900,
+        "image": "https://m.media-amazon.com/images/I/71JGCn1z1TL._AC_UY218_.jpg",
+        "rating": 4.6,
+        "reviews": 0,
+        "url": "https://www.amazon.in/dp/B0FQFQF6D1",
+        "website": "Amazon"
+    },
+    {
+        "title": "Apple",
+        "price": 64900,
+        "image": "https://m.media-amazon.com/images/I/61zVFiTawKL._AC_UY218_.jpg",
+        "rating": 4.2,
+        "reviews": 0,
+        "url": "https://www.amazon.in/dp/B0GQVQY8B7",
+        "website": "Amazon"
+    },
+    {
+        "title": "Apple",
+        "price": 96990,
+        "image": "https://m.media-amazon.com/images/I/61knPJtYRpL._AC_UY218_.jpg",
+        "rating": 4.6,
+        "reviews": 0,
+        "url": "https://www.amazon.in/dp/B0FQFBDQJ1",
+        "website": "Amazon"
+    },
+    {
+        "title": "OnePlus",
+        "price": 42999,
+        "image": "https://m.media-amazon.com/images/I/61aAC4zDc9L._AC_UY218_.jpg",
+        "rating": 4.3,
+        "reviews": 0,
+        "url": "https://www.amazon.in/dp/B0GRB5C1HW",
+        "website": "Amazon"
+    },
+    {
+        "title": "Apple",
+        "price": 84900,
+        "image": "https://m.media-amazon.com/images/I/61ULimPWODL._AC_UY218_.jpg",
+        "rating": 4.2,
+        "reviews": 0,
+        "url": "https://www.amazon.in/dp/B0GQVJCHGD",
+        "website": "Amazon"
+    },
+    {
+        "title": "OnePlus",
+        "price": 33999,
+        "image": "https://m.media-amazon.com/images/I/61Di24QT6GL._AC_UY218_.jpg",
+        "rating": 4.2,
+        "reviews": 0,
+        "url": "https://www.amazon.in/dp/B0GWLHVJRH",
+        "website": "Amazon"
+    },
+    {
+        "title": "OnePlus",
+        "price": 54999,
+        "image": "https://m.media-amazon.com/images/I/61EUYqQSoTL._AC_UY218_.jpg",
+        "rating": 4.6,
+        "reviews": 0,
+        "url": "https://www.amazon.in/dp/B0F5WTG8RG",
+        "website": "Amazon"
+    },
+    {
+        "title": "Samsung",
+        "price": 87999,
+        "image": "https://m.media-amazon.com/images/I/71N8YkTS0TL._AC_UY218_.jpg",
+        "rating": 4.3,
+        "reviews": 0,
+        "url": "https://www.amazon.in/dp/B0GL87VP7N",
+        "website": "Amazon"
+    },
+    {
+        "title": "Samsung",
+        "price": 109999,
+        "image": "https://m.media-amazon.com/images/I/71T10gT0BSL._AC_UY218_.jpg",
         "rating": 4.4,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B000GAYQJ0",
+        "url": "https://www.amazon.in/dp/B0DSKL9MQ8",
         "website": "Amazon"
     },
     {
-        "title": "Joker & Witch",
-        "price": 699,
-        "image": "https://m.media-amazon.com/images/I/612o9Ento4L._AC_UL320_.jpg",
-        "rating": 4.0,
+        "title": "Apple",
+        "price": 96990,
+        "image": "https://m.media-amazon.com/images/I/614MsdnfBxL._AC_UY218_.jpg",
+        "rating": 4.5,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B083P2ZGYL",
+        "url": "https://www.amazon.in/dp/B0FQFTV1NP",
         "website": "Amazon"
     },
     {
-        "title": "Joker & Witch",
-        "price": 1169,
-        "image": "https://m.media-amazon.com/images/I/5188inp2WGL._AC_UL320_.jpg",
-        "rating": 3.8,
+        "title": "OnePlus",
+        "price": 54999,
+        "image": "https://m.media-amazon.com/images/I/61h53LtSVVL._AC_UY218_.jpg",
+        "rating": 4.5,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BBFGPT3D",
+        "url": "https://www.amazon.in/dp/B0FZT1LXPZ",
         "website": "Amazon"
     },
     {
-        "title": "Joker & Witch",
-        "price": 759,
-        "image": "https://m.media-amazon.com/images/I/6157YMDnYaL._AC_UL320_.jpg",
-        "rating": 3.9,
+        "title": "OnePlus",
+        "price": 27999,
+        "image": "https://m.media-amazon.com/images/I/61T18EfkX0L._AC_UY218_.jpg",
+        "rating": 4.3,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BPMB1742",
+        "url": "https://www.amazon.in/dp/B0GVYXPZBS",
         "website": "Amazon"
     },
     {
-        "title": "Joker & Witch",
-        "price": 759,
-        "image": "https://m.media-amazon.com/images/I/61G5qCJyXZL._AC_UL320_.jpg",
-        "rating": 3.9,
+        "title": "Samsung",
+        "price": 107999,
+        "image": "https://m.media-amazon.com/images/I/71ju4kS-W8L._AC_UY218_.jpg",
+        "rating": 4.3,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B086GSK9YN",
+        "url": "https://www.amazon.in/dp/B0GL8SGHMT",
         "website": "Amazon"
     },
     {
-        "title": "Joker & Witch",
-        "price": 759,
-        "image": "https://m.media-amazon.com/images/I/618Ggoi8w4L._AC_UL320_.jpg",
-        "rating": 3.9,
+        "title": "OPPO",
+        "price": 89999,
+        "image": "https://m.media-amazon.com/images/I/71dojk1bCYL._AC_UY218_.jpg",
+        "rating": 4.3,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B08SLYYVCW",
+        "url": "https://www.amazon.in/dp/B0GZ7WYHNJ",
         "website": "Amazon"
     },
     {
-        "title": "METEOROID",
-        "price": 649,
-        "image": "https://m.media-amazon.com/images/I/81N6XH-RDnL._AC_UL320_.jpg",
-        "rating": 4.1,
+        "title": "OnePlus",
+        "price": 25999,
+        "image": "https://m.media-amazon.com/images/I/61bbly9wcKL._AC_UY218_.jpg",
+        "rating": 4.3,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0CJCSNGVK",
+        "url": "https://www.amazon.in/dp/B0GVYGX4JX",
         "website": "Amazon"
     },
     {
-        "title": "BRUNO MILANO",
-        "price": 3598,
-        "image": "https://m.media-amazon.com/images/I/71NS7Jb3EXL._AC_UL320_.jpg",
-        "rating": 4.0,
+        "title": "XIAOMI",
+        "price": 64999,
+        "image": "https://m.media-amazon.com/images/I/61Pr9qBNwVL._AC_UY218_.jpg",
+        "rating": 4.6,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0DP4CLM6R",
+        "url": "https://www.amazon.in/dp/B0GYX5HDJ6",
         "website": "Amazon"
     },
     {
-        "title": "LIMESTONE",
-        "price": 329,
-        "image": "https://m.media-amazon.com/images/I/812pj-GEhfL._AC_UL320_.jpg",
-        "rating": 3.5,
+        "title": "OnePlus",
+        "price": 61999,
+        "image": "https://m.media-amazon.com/images/I/61h53LtSVVL._AC_UY218_.jpg",
+        "rating": 4.5,
         "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0GNMSGN3K",
-        "website": "Amazon"
-    },
-    {
-        "title": "Carlington",
-        "price": 799,
-        "image": "https://m.media-amazon.com/images/I/71FC0Vmp7qL._AC_UL320_.jpg",
-        "rating": 3.4,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0DZT886FK",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 599,
-        "image": "https://m.media-amazon.com/images/I/61Jp-BEVUGL._AC_UL320_.jpg",
-        "rating": 4.0,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BD8ZP2C7",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 759,
-        "image": "https://m.media-amazon.com/images/I/61Ytxx18t-L._AC_UL320_.jpg",
-        "rating": 4.0,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B08WQ97599",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 639,
-        "image": "https://m.media-amazon.com/images/I/71u1CzKSG0L._AC_UL320_.jpg",
-        "rating": 4.2,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BJ788JC4",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 1169,
-        "image": "https://m.media-amazon.com/images/I/613CA2MdIaL._AC_UL320_.jpg",
-        "rating": 4.2,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BLS95GRS",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 1499,
-        "image": "https://m.media-amazon.com/images/I/71GxhGppRfL._AC_UL320_.jpg",
-        "rating": 3.9,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0FJRR1L9R",
-        "website": "Amazon"
-    },
-    {
-        "title": "Joker & Witch",
-        "price": 859,
-        "image": "https://m.media-amazon.com/images/I/618D+tlHvXL._AC_UL320_.jpg",
-        "rating": 3.9,
-        "reviews": 0,
-        "url": "https://www.amazon.in/dp/B0BSV9MYSP",
+        "url": "https://www.amazon.in/dp/B0H3K981XX",
         "website": "Amazon"
     }
 ]

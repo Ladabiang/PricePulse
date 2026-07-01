@@ -1,9 +1,3 @@
-/* =====================================================
-   PricePulse Dashboard JS
-   Professional / Industry Level Frontend Logic
-   File: static/js/dashboard.js
-===================================================== */
-
 document.addEventListener("DOMContentLoaded", function () {
     initLoader();
     initSearchValidation();

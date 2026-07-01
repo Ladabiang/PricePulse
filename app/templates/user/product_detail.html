@@ -33,6 +33,40 @@ body{
     color:#38bdf8;
 }
 
+.logout-btn{
+    margin-left:12px;
+    padding:8px 14px;
+    border-radius:10px;
+
+    border:1px solid #38bdf8;
+    color:#38bdf8;
+    background:transparent;
+
+    font-weight:600;
+    transition: all 0.25s ease;
+}
+
+.logout-btn:hover{
+    background:#38bdf8;
+    color:#081120;
+}
+
+.nav-link-custom{
+    color:#e5e7eb !important;
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:600;
+    transition:0.25s ease;
+}
+
+.nav-link-custom:hover{
+    color:#38bdf8 !important;
+}
+
+.nav-link-custom.active{
+    color:#38bdf8 !important;
+}
+
 .container{
     margin-top:30px;
 }
@@ -170,11 +204,17 @@ NAVBAR
     </a>
 
     <div>
-        <a href="{{ url_for('web.dashboard') }}" class="text-white me-3">Dashboard</a>
-        <a href="{{ url_for('web.history') }}" class="text-white me-3">History</a>
-        <a href="{{ url_for('web.alerts') }}" class="text-white me-3">Alerts</a>
-        <a href="{{ url_for('web.saved') }}" class="text-white me-3">Saved</a>
+        <a href="{{ url_for('web.dashboard') }}" class="nav-link-custom">Dashboard</a>
+        <a href="{{ url_for('web.history') }}" class="nav-link-custom">History</a>
+        <a href="{{ url_for('web.alerts') }}" class="nav-link-custom">Alerts</a>
+        <a href="{{ url_for('web.saved') }}" class="nav-link-custom">Saved</a>
     </div>
+
+    <a href="{{ url_for('auth.logout') }}"
+       class="logout-btn text-decoration-none">
+        Logout
+    </a>
+
 </div>
 
 <!-- ==================================================
@@ -245,6 +285,33 @@ CONTENT
                     <div class="small-muted">
                         Latest checked price from price history
                     </div>
+                </div>
+
+                <!-- AI PRICE PREDICTION -->
+                <div class="insight-card">
+
+                    <div class="insight-title">
+                        AI Price Prediction
+                    </div>
+
+                    {% if predicted_price %}
+
+                        <div class="price">
+                            ₹{{ predicted_price }}
+                        </div>
+
+                        <p class="small-muted mb-0">
+                            {{ ml_recommendation }}
+                        </p>
+
+                    {% else %}
+
+                        <p class="text-muted mb-0">
+                            Not enough price history for prediction yet.
+                        </p>
+
+                    {% endif %}
+
                 </div>
 
                 <!-- PRICE ANALYTICS -->
@@ -347,13 +414,13 @@ CONTENT
                         Tracking Status
                     </div>
 
-                    {% if is_active %}
+                   {% if is_active %}
                         <p class="text-success fw-bold mb-1">
-                            This product is currently being tracked.
+                            {{ tracking_status }}
                         </p>
                     {% else %}
                         <p class="text-muted fw-bold mb-1">
-                            Tracking is currently stopped.
+                            {{ tracking_status }}
                         </p>
                     {% endif %}
 
@@ -368,6 +435,8 @@ CONTENT
 
         </div>
 
+
+        
         <!-- ==================================================
         ACTION BUTTONS
         ================================================== -->
@@ -419,10 +488,10 @@ const ctx = document.getElementById('priceChart');
 new Chart(ctx, {
     type: 'line',
     data: {
-        labels: {{ graph_labels|tojson }},
+        labels: {{ prediction_labels|tojson }},
         datasets: [{
             label: 'Price',
-            data: {{ graph_prices|tojson }},
+            data: {{ prediction_prices|tojson }},
             borderColor: '#38bdf8',
             backgroundColor: 'rgba(56, 189, 248, 0.15)',
             tension: 0.3,

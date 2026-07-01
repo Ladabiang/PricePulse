@@ -57,7 +57,6 @@ class ProductLink(db.Model):
 
     # ==================================================
     # PRICE HISTORY RELATIONSHIP
-    # FIXED BACKREF CONFLICT
     # ==================================================
     price_history = db.relationship(
         "PriceHistory",

@@ -1,7 +1,3 @@
-# =====================================================
-# File: app/models/tracked_product.py
-# =====================================================
-
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -34,6 +30,7 @@ class TrackedProduct(db.Model):
     )
 
     product_name = db.Column(db.String(300), nullable=False)
+    image = db.Column(db.Text, nullable=True)
     website = db.Column(db.String(100), nullable=False)
 
     price = db.Column(db.Float, default=0)
@@ -64,20 +61,10 @@ class TrackedProduct(db.Model):
         onupdate=lambda: datetime.now(timezone.utc)
     )
 
-    # =====================================================
-    # RELATIONSHIP: USER
-    # =====================================================
     user = db.relationship(
         "User",
         backref=db.backref("tracked_products", lazy=True)
     )
-
-    # =====================================================
-    # RELATIONSHIP: PRODUCT
-    # IMPORTANT:
-    # No backref here, because Product model already has:
-    # tracked_items = db.relationship("TrackedProduct", ...)
-    # =====================================================
     product = db.relationship(
         "Product"
     )

@@ -5,7 +5,7 @@
     <!-- BRAND (LEFT ONLY LOGO) -->
     <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url_for('web.dashboard') }}">
 
-        <span class="brand-icon me-2">⚡</span>
+        <span class="brand-icon me-2"></span>
         PricePulse
 
         <span class="d-none d-md-inline ms-2 brand-sub">
@@ -29,7 +29,7 @@
             <!-- NOTIFICATIONS -->
             <li class="nav-item">
                 <a class="nav-link icon-btn" href="{{ url_for('web.alerts') }}">
-                    🔔
+                    Alert
                 </a>
             </li>
 
@@ -60,19 +60,19 @@
 
                     <li>
                         <a class="dropdown-item" href="{{ url_for('web.dashboard') }}">
-                            🏠 Dashboard
+                             Dashboard
                         </a>
                     </li>
 
                     <li>
                         <a class="dropdown-item" href="{{ url_for('web.analytics') }}">
-                            📊 Analytics
+                             Analytics
                         </a>
                     </li>
 
                     <li>
                         <a class="dropdown-item" href="{{ url_for('web.settings') }}">
-                            ⚙️ Settings
+                             Settings
                         </a>
                     </li>
 
@@ -81,7 +81,7 @@
                     <li>
                         <a class="dropdown-item text-danger fw-semibold"
                            href="{{ url_for('auth.logout') }}">
-                            🚪 Logout
+                             Logout
                         </a>
                     </li>
 

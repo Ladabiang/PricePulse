@@ -1,8 +1,3 @@
-# ==================================================
-# app/services/email_service.py
-# PricePulse Email Alert Service
-# ==================================================
-
 from flask_mail import Message
 from flask import current_app
 
@@ -18,6 +13,8 @@ def send_price_drop_email(
 ):
     """
     Sends price drop / target price reached email to user.
+    Returns True if email is sent successfully.
+    Returns False if email fails.
     """
 
     try:
@@ -25,12 +22,27 @@ def send_price_drop_email(
             print("EMAIL ERROR: No user email provided")
             return False
 
+        mail_username = current_app.config.get("MAIL_USERNAME")
+        mail_password = current_app.config.get("MAIL_PASSWORD")
+        mail_sender = current_app.config.get("MAIL_DEFAULT_SENDER")
+
+        if not mail_username:
+            print("EMAIL ERROR: MAIL_USERNAME is missing")
+            return False
+
+        if not mail_password:
+            print("EMAIL ERROR: MAIL_PASSWORD is missing")
+            return False
+
+        if not mail_sender:
+            mail_sender = mail_username
+
         subject = "Price Alert - PricePulse"
 
         msg = Message(
             subject=subject,
             recipients=[user_email],
-            sender=current_app.config.get("MAIL_DEFAULT_SENDER")
+            sender=mail_sender
         )
 
         msg.body = f"""
@@ -107,10 +119,12 @@ PricePulse Smart Tracker
 
         mail.send(msg)
 
+        print("EMAIL SERVICE STATUS: SUCCESS")
         print(f"EMAIL SENT TO: {user_email}")
 
         return True
 
     except Exception as e:
+        print("EMAIL SERVICE STATUS: FAILED")
         print("EMAIL ERROR:", e)
         return False

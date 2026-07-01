@@ -153,6 +153,13 @@ body{
     margin-bottom:20px;
     color:#111827;
 }
+.section-subtitle{
+    color:#64748b;
+    font-size:14px;
+    margin-top:-6px;
+    margin-bottom:0;
+    font-weight:500;
+}
 
 /* ================= STATS ================= */
 .stat-card{
@@ -177,15 +184,43 @@ body{
     padding:16px;
     border:1px solid #ddd;
     transition:.3s;
+
+    height:100%;
+    display:flex;
+    flex-direction:column;
 }
 
 .product-card:hover{
     transform:translateY(-6px);
     border-color:#38bdf8;
 }
+.deal-image-box{
+    width:100%;
+    height:170px;
+    background:#f8fafc;
+    border-radius:16px;
+    margin-bottom:14px;
+    padding:12px;
+}
+
+.deal-image-box img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
 
 .price{ font-size:20px; font-weight:800; }
-.old{ text-decoration:line-through; color:#888; font-size:13px; }
+.product-title{
+    min-height:72px;
+    max-height:72px;
+    overflow:hidden;
+    line-height:1.4;
+    font-weight:700;
+}
+
+.product-actions{
+    margin-top:auto;
+}
 
 .track-btn{
     background:#38bdf8;
@@ -251,8 +286,14 @@ body{
 
 /* ================= MEGA DROPDOWN ================= */
 .mega-panel{
-    width: 720px;
+    width: 820px;
+    min-height: 320px;
     padding: 20px;
+
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(10px);
+    transition:all 0.25s ease;
 
     background: #0f172a;
     border-radius: 14px;
@@ -266,14 +307,17 @@ body{
     box-shadow: 0 20px 50px rgba(0,0,0,0.4);
 }
 .cat-item:hover .mega-panel{
-    display: block;
+    display:block;
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
 }
 
 /* FLEX INSIDE ONLY */
 .mega-wrapper{
-    display: flex;
-    flex-direction: column; 
-    gap: 40px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:30px;
 }
 
 /* ================= COLUMN ================= */
@@ -282,28 +326,36 @@ body{
 }
 
 .mega-column h6{
-    font-size: 14px;
+    font-size:15px;
+    letter-spacing:0.4px;
     font-weight: 800;
     color: #38bdf8;
     margin-bottom: 10px;
 }
 
 .mega-column a{
-    display: block;
-    font-size: 14px;
-    color: #cbd5e1;
-    text-decoration: none;
-    margin-bottom: 6px;
+    display:block;
+    padding:8px 10px;
+    border-radius:10px;
+
+    font-size:14px;
+    font-weight:500;
+
+    color:#cbd5e1;
+    text-decoration:none;
+
+    transition:0.2s ease;
 }
 
 .mega-column a:hover{
-    color: #fff;
+    background:rgba(56,189,248,0.12);
+    color:#38bdf8;
+    transform:translateX(4px);
 }
 
 .mega-panel{
-    display: none;   /* 🔥 IMPORTANT */
-    margin-top: 0;   /* remove gap */
-    z-index: 10001;
+    display: none;   
+    margin-top: 0;  
 }
 
 .category-bar,
@@ -425,14 +477,6 @@ body{
                              Settings
                         </a>
                     </li>
-
-    <li><hr class="dropdown-divider"></li>
-
-        <li>
-            <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
-                 Logout
-            </a>
-        </li>
 
 </ul>
             </div>
@@ -734,25 +778,35 @@ body{
 
         <!-- ================= PRODUCTS HEADER ================= -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2 class="section-title">Recommended Deals</h2>
+            <div>
+                <h2 class="section-title mb-1">
+                    Trending Products
+                </h2>
+
+                <p class="section-subtitle">
+                    Most searched and actively monitored products across marketplaces
+                </p>
+            </div>
 
             <div class="d-flex gap-2 flex-wrap">
 
-                <a href="{{ url_for('web.shop') }}"
-                class="btn btn-sm btn-outline-dark">All</a>
+                <a href="{{ url_for('web.dashboard') }}"
+                class="btn btn-sm {% if deal_filter == 'all' %}btn-dark{% else %}btn-outline-dark{% endif %}">
+                    All
+                </a>
 
-                <a href="{{ url_for('web.shop', category='electronics', min=10000, max=30000) }}"
-                class="btn btn-sm btn-outline-primary">
+                <a href="{{ url_for('web.dashboard', deal_filter='budget') }}"
+                class="btn btn-sm {% if deal_filter == 'budget' %}btn-primary{% else %}btn-outline-primary{% endif %}">
                     ₹10K - ₹30K
                 </a>
 
-                <a href="{{ url_for('web.shop', category='electronics', sub='laptops') }}"
-                class="btn btn-sm btn-outline-success">
+                <a href="{{ url_for('web.dashboard', deal_filter='laptops') }}"
+                class="btn btn-sm {% if deal_filter == 'laptops' %}btn-success{% else %}btn-outline-success{% endif %}">
                     Laptops
                 </a>
 
-                <a href="{{ url_for('web.shop', category='electronics', sub='smartphones') }}"
-                class="btn btn-sm btn-outline-warning">
+                <a href="{{ url_for('web.dashboard', deal_filter='smartphones') }}"
+                class="btn btn-sm {% if deal_filter == 'smartphones' %}btn-warning{% else %}btn-outline-warning{% endif %}">
                     Smartphones
                 </a>
 
@@ -786,18 +840,23 @@ body{
 
                     </div>
 
+                    <div class="deal-image-box">
+                        <img src="{{ p.image or 'https://via.placeholder.com/300?text=No+Image' }}"
+                            alt="Product Image">
+                    </div>
+
                     <!-- PRODUCT TITLE -->
-                    <h6 class="mt-2">
-                        {{ p.title }}
+                    <h6 class="mt-2 product-title">
+                        {{ p.product_name }}
                     </h6>
 
                     <!-- PRICE -->
                     <div class="price">
-                        ₹{{ p.current_price }}
+                        ₹{{ p.price }}
                     </div>
 
                     <div class="old">
-                        ₹{{ p.original_price }}
+                        ₹{{ p.old_price or p.price }}
                     </div>
 
                     <!-- INSIGHT MESSAGE -->
@@ -811,15 +870,32 @@ body{
                         </small>
                     {% endif %}
 
+             
                     <!-- ACTIONS -->
-                    <div class="d-grid gap-2 mt-3">
+                    <div class="d-grid gap-2 mt-3 product-actions">
 
                         <!-- TRACK FORM -->
                         <form method="POST" action="/track-product">
-                            <input type="hidden" name="name" value="{{ p.title }}">
-                            <input type="hidden" name="price" value="{{ p.current_price }}">
-                            <input type="hidden" name="website" value="{{ p.website }}">
-                            <input type="hidden" name="url" value="{{ p.url }}">
+
+                            <input type="hidden"
+                                name="name"
+                                value="{{ p.product_name }}">
+
+                            <input type="hidden"
+                                name="price"
+                                value="{{ p.price }}">
+
+                            <input type="hidden"
+                                name="website"
+                                value="{{ p.website }}">
+
+                            <input type="hidden"
+                                name="url"
+                                value="{{ p.product_url }}">
+
+                            <input type="hidden"
+                                name="image"
+                                value="{{ p.image }}">
                             
                             <button type="submit" class="track-btn">
                                 Track Price
@@ -827,7 +903,7 @@ body{
                         </form>
 
                         <!-- VIEW PRODUCT -->
-                        <a href="{{ p.url }}" target="_blank"
+                        <a href="{{ p.product_url }}" target="_blank"
                         class="btn btn-outline-secondary btn-sm">
                             View Product
                         </a>

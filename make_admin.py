@@ -10,23 +10,23 @@ def promote_to_admin(email):
 
     with app.app_context():
 
-        # ✅ FIXED: avoid User.query in scripts
+        # FIXED: avoid User.query in scripts
         user = db.session.query(User).filter_by(
             email=email.strip().lower()
         ).first()
 
         if not user:
-            print("❌ User not found.")
+            print(" User not found.")
             return
 
         if user.role == "admin":
-            print("⚠ Already admin")
+            print(" Already admin")
             return
 
         user.role = "admin"
         db.session.commit()
 
-        print("✅ Success: User promoted to admin")
+        print(" Success: User promoted to admin")
         print(f"Email: {user.email}")
 
 

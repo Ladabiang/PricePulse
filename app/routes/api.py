@@ -130,8 +130,7 @@ def get_product(product_id):
 
 
 # =========================================
-# 4. GET PRICE HISTORY (REQUIRED)
-# /api/history/<product_id>
+# 4. GET PRICE HISTORY
 # =========================================
 @api_bp.route("/history/<int:product_id>", methods=["GET"])
 @login_required
@@ -154,7 +153,7 @@ def price_history(product_id):
             })
             price_list.append(h.price)
 
-    # 🔥 AI Prediction Added
+    #  AI Prediction Added
     prediction = predict_price(price_list) if price_list else {}
 
     return jsonify({
@@ -202,7 +201,9 @@ def trigger_scrape(product_id):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-#search
+# =========================================
+# 7. SEARCH
+# =========================================
 @api_bp.route("/search", methods=["GET"])
 def search_products():
     query = request.args.get("q", "").strip()
@@ -281,7 +282,7 @@ def search_products():
             "details": str(e)
         }), 500
 # =========================================
-# 7. UPDATE TARGET PRICE
+# 8. UPDATE TARGET PRICE
 # =========================================
 @api_bp.route("/products/<int:product_id>/target", methods=["PUT"])
 @login_required

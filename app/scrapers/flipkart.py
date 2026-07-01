@@ -1,66 +1,41 @@
-# =========================================================
-# FILE: scrapers/flipkart.py
-# FINAL ADVANCED FLIPKART SCRAPER
-# =========================================================
-
 import logging
-import time
 import random
 import re
-
-from urllib.parse import quote_plus
+import time
+from urllib.parse import quote_plus, urljoin
 
 from bs4 import BeautifulSoup
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
-
-# =========================================================
-# LOGGER
-# =========================================================
 
 logger = logging.getLogger("flipkart")
 
 BASE_URL = "https://www.flipkart.com"
+PLACEHOLDER_IMAGE = "https://via.placeholder.com/300?text=No+Image"
 
 
-# =========================================================
+# ==================================================
 # HELPERS
-# =========================================================
-
+# ==================================================
 def safe_text(tag):
-
     try:
-        return tag.get_text(strip=True)
+        return tag.get_text(" ", strip=True) if tag else ""
     except:
         return ""
 
 
 def clean_price(text):
-
     try:
-
-        if not text:
-            return 0
-
-        text = (
-            str(text)
-            .replace("₹", "")
-            .replace(",", "")
-            .strip()
-        )
-
+        text = str(text or "").replace("₹", "").replace(",", "").strip()
         match = re.search(r"\d+", text)
-
         return int(match.group()) if match else 0
-
     except:
         return 0
 
 
 def clean_image(src):
-
     if not src:
-        return "https://via.placeholder.com/300?text=No+Image"
+        return PLACEHOLDER_IMAGE
 
     src = src.strip()
 
@@ -71,336 +46,399 @@ def clean_image(src):
         src = BASE_URL + src
 
     if src.startswith("data:image"):
-        return "https://via.placeholder.com/300?text=No+Image"
+        return PLACEHOLDER_IMAGE
 
     return src
 
 
 def extract_rating(text):
-
     try:
-
-        if not text:
-            return 0.0
-
-        match = re.search(r"\d+(\.\d+)?", text)
-
+        match = re.search(r"\d+(\.\d+)?", str(text or ""))
         return float(match.group()) if match else 0.0
-
     except:
         return 0.0
 
 
-def is_blocked(html):
+def clean_reviews(text):
+    try:
+        text = str(text or "")
+        digits = re.sub(r"[^\d]", "", text)
+        return digits if digits else "0"
+    except:
+        return "0"
 
-    html = html.lower()
+
+def is_blocked(html):
+    html = str(html or "").lower()
 
     blocked_words = [
-
         "captcha",
         "access denied",
         "robot",
         "security check",
-        "blocked",
-        "verify you are human"
+        "verify you are human",
+        "unusual traffic"
     ]
 
     return any(word in html for word in blocked_words)
 
 
-# =========================================================
-# PLAYWRIGHT PAGE
-# =========================================================
+def first_valid_price_from_text(text):
+    matches = re.findall(r"₹\s?[\d,]+", str(text or ""))
 
-def create_page():
+    for m in matches:
+        price = clean_price(m)
+        if price > 0:
+            return price
 
-    playwright = sync_playwright().start()
-
-    browser = playwright.chromium.launch(
-
-        headless=False,
-
-        args=[
-
-            "--disable-blink-features=AutomationControlled",
-            "--disable-dev-shm-usage",
-            "--no-sandbox",
-            "--disable-setuid-sandbox"
-        ]
-    )
-
-    context = browser.new_context(
-
-        viewport={
-            "width": 1366,
-            "height": 768
-        },
-
-        locale="en-IN",
-
-        user_agent=(
-
-            "Mozilla/5.0 "
-            "(Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 "
-            "(KHTML, like Gecko) "
-            "Chrome/124.0 Safari/537.36"
-        )
-    )
-
-    page = context.new_page()
-
-    # =====================================================
-    # STEALTH
-    # =====================================================
-
-    page.add_init_script("""
-
-        Object.defineProperty(navigator, 'webdriver', {
-            get: () => undefined
-        });
-
-        window.chrome = {
-            runtime: {}
-        };
-
-        Object.defineProperty(navigator, 'plugins', {
-            get: () => [1,2,3,4]
-        });
-
-        Object.defineProperty(navigator, 'languages', {
-            get: () => ['en-US', 'en']
-        });
-
-    """)
-
-    return playwright, browser, page
+    return 0
 
 
-# =========================================================
-# SCRAPE SINGLE PRODUCT
-# =========================================================
+# ==================================================
+# OPEN FLIPKART PAGE
+# ==================================================
+def open_flipkart_page(url):
+    html = ""
 
-def scrape_flipkart_product(url):
+    with sync_playwright() as p:
 
-    try:
-
-        playwright, browser, page = create_page()
-
-        logger.info(f"Opening Flipkart URL: {url}")
-
-        page.goto(
-
-            url,
-            timeout=120000,
-            wait_until="domcontentloaded"
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--disable-blink-features=AutomationControlled",
+                "--disable-dev-shm-usage",
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-gpu"
+            ]
         )
 
-        # =================================================
-        # HUMAN DELAY
-        # =================================================
+        context = browser.new_context(
+            viewport={"width": 1366, "height": 768},
+            locale="en-IN",
+            java_script_enabled=True,
+            user_agent=random.choice([
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/136.0 Safari/537.36",
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/135.0 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/134.0 Safari/537.36"
+            ])
+        )
 
-        time.sleep(random.uniform(8, 12))
+        context.add_init_script("""
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => undefined
+            });
 
-        # =================================================
-        # CLOSE LOGIN POPUP
-        # =================================================
+            window.chrome = { runtime: {} };
+
+            Object.defineProperty(navigator, 'plugins', {
+                get: () => [1, 2, 3, 4, 5]
+            });
+
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['en-IN', 'en-US', 'en']
+            });
+        """)
+
+        page = context.new_page()
+        page.set_default_timeout(20000)
 
         try:
+            page.goto(
+                url,
+                wait_until="domcontentloaded",
+                timeout=30000
+            )
+        except PlaywrightTimeoutError:
+            logger.warning("[Flipkart] Timeout, reading partial HTML")
 
-            close_btn = page.locator("button._2KpZ6l._2doB4z")
+        page.wait_for_timeout(6000)
 
-            if close_btn.count() > 0:
+        try:
+            close_btns = [
+                "button._2KpZ6l._2doB4z",
+                "button._30XB9F",
+                "button[class*='_2KpZ6l']"
+            ]
 
-                close_btn.first.click()
-
-                time.sleep(2)
-
+            for selector in close_btns:
+                btn = page.locator(selector)
+                if btn.count() > 0:
+                    btn.first.click(timeout=1500)
+                    break
         except:
             pass
 
-        # =================================================
-        # WAIT FOR PRODUCT CONTENT
-        # =================================================
+        try:
+            for _ in range(3):
+                page.mouse.wheel(0, random.randint(1000, 1800))
+                time.sleep(random.uniform(0.5, 1.2))
+        except:
+            pass
 
         try:
-
-            page.wait_for_selector(
-
-                "h1, span.VU-ZEz, span.B_NuCI",
-                timeout=30000
-            )
-
+            page.evaluate("""
+                window.scrollTo(0, document.body.scrollHeight)
+            """)
+            page.wait_for_timeout(3000)
         except:
-            logger.warning("Product title selector timeout")
-
-        # =================================================
-        # HUMAN ACTIVITY
-        # =================================================
-
-        page.mouse.move(300, 400)
-        time.sleep(1)
-
-        page.mouse.move(600, 500)
-        time.sleep(1)
-
-        page.mouse.wheel(0, 2000)
-        time.sleep(2)
-
-        page.mouse.wheel(0, 1500)
-        time.sleep(2)
-
-        page.mouse.wheel(0, -800)
-        time.sleep(2)
-
-        # EXTRA WAIT FOR JS CONTENT
-        time.sleep(random.uniform(5, 8))
+            pass
 
         html = page.content()
 
-        # DEBUG SAVE
-
-        with open(
-            "flipkart_product_debug.html",
-            "w",
-            encoding="utf-8"
-        ) as f:
-
-            f.write(html)
-
         browser.close()
-        playwright.stop()
 
-        # =================================================
-        # CAPTCHA CHECK
-        # =================================================
+    return html
+
+
+# ==================================================
+# PARSE SEARCH ITEM
+# ==================================================
+def parse_search_item(item):
+    try:
+        link_tag = (
+            item.select_one("a.CGtC98")
+            or item.select_one("a._1fQZEK")
+            or item.select_one("a.IRpwTa")
+            or item.select_one("a.s1Q9rs")
+            or item.select_one("a[href]")
+        )
+
+        if not link_tag:
+            return None
+
+        href = link_tag.get("href") or ""
+        product_url = urljoin(BASE_URL, href)
+
+        title_tag = (
+            item.select_one("div.KzDlHZ")
+            or item.select_one("div._4rR01T")
+            or item.select_one("a.IRpwTa")
+            or item.select_one("a.s1Q9rs")
+            or item.select_one("a.WKTcLC")
+            or item.select_one("a[title]")
+            or link_tag
+        )
+
+        title = ""
+        if title_tag:
+            title = title_tag.get("title") or safe_text(title_tag)
+
+        if not title and link_tag:
+            title = link_tag.get("title") or safe_text(link_tag)
+
+        price_tag = (
+            item.select_one("div.Nx9bqj")
+            or item.select_one("div._30jeq3")
+            or item.select_one("div._30jeq3._1_WHN1")
+            or item.select_one("div.CEmiEU")
+            or item.select_one("div.yRaY8j")
+            or item.select_one("div[class*='Nx9bqj']")
+            or item.select_one("div[class*='_30jeq3']")
+        )
+
+        price = clean_price(safe_text(price_tag)) if price_tag else 0
+
+        if price <= 0:
+            price = first_valid_price_from_text(item.get_text(" ", strip=True))
+
+        image_tag = (
+            item.select_one("img.DByuf4")
+            or item.select_one("img._396cs4")
+            or item.select_one("img._53J4C-")
+            or item.select_one("img")
+        )
+
+        image = PLACEHOLDER_IMAGE
+
+        if image_tag:
+            image = clean_image(
+                image_tag.get("src")
+                or image_tag.get("data-src")
+                or image_tag.get("loading")
+                or ""
+            )
+
+        # =========================
+        # RATING + REVIEWS FALLBACK
+        # =========================
+        full_text = item.get_text(" ", strip=True)
+
+        rating = 0.0
+        reviews = "0"
+
+        rating_match = re.search(r"(\d\.\d)", full_text)
+
+        if rating_match:
+            rating = float(rating_match.group(1))
+
+        review_match = re.search(
+            r"([\d,]+)\s*(Ratings|Rating|Reviews|Review)",
+            full_text,
+            re.IGNORECASE
+        )
+
+        if review_match:
+            reviews = review_match.group(1).replace(",", "")
+
+        if not title or title == "N/A":
+            return None
+
+        if price <= 0:
+            return None
+
+        if not product_url:
+            return None
+        logger.info(
+            f"[Flipkart] "
+            f"Rating={rating} "
+            f"Reviews={reviews} "
+            f"Title={title[:40]}"
+        )
+        logger.info(f"[Flipkart DEBUG] TEXT={full_text[:300]}")
+        logger.info(f"[Flipkart DEBUG] Rating={rating}, Reviews={reviews}")
+        return {
+            "title": title,
+            "price": price,
+            "old_price": price,
+            "image": image,
+            "url": product_url,
+            "website": "Flipkart",
+            "rating": rating,
+            "reviews": reviews
+        }
+
+    except Exception as e:
+        logger.debug(f"[Flipkart] Item parse error: {e}")
+        return None
+
+
+# ==================================================
+# SEARCH FLIPKART
+# ==================================================
+def search_flipkart(query):
+    results = []
+
+    try:
+        logger.info(f"[Flipkart] Searching: {query}")
+
+        search_url = f"{BASE_URL}/search?q={quote_plus(query)}"
+
+        logger.info(f"[Flipkart] Opening Search URL: {search_url}")
+
+        html = open_flipkart_page(search_url)
+
+        if not html:
+            logger.warning("[Flipkart] Empty HTML")
+            return []
 
         if is_blocked(html):
-
-            logger.warning("Flipkart blocked request")
-
-            return {
-
-                "title": "Blocked by Flipkart",
-                "price": 0,
-                "image": "https://via.placeholder.com/300?text=Blocked",
-                "rating": 0.0,
-                "reviews": "0",
-                "url": url,
-                "website": "Flipkart"
-            }
+            logger.warning("[Flipkart] Blocked or captcha detected")
+            return []
 
         soup = BeautifulSoup(html, "html.parser")
 
-        # =================================================
-        # TITLE
-        # =================================================
+        product_blocks = (
+            soup.select("div[data-id]")
+            or soup.select("div._1AtVbE")
+            or soup.select("div.cPHDOP")
+            or soup.select("div.slAVV4")
+        )
 
-        title = "N/A"
+        logger.info(f"[Flipkart] Found containers: {len(product_blocks)}")
 
-        title_selectors = [
+        seen_urls = set()
 
-            "h1.v1zwn21l",
-            "h1[class*='v1zwn']",
-            "span.VU-ZEz",
-            "span.B_NuCI",
-            "h1 span",
-            "h1"
-        ]
+        for item in product_blocks[:30]:
 
-        for selector in title_selectors:
+            parsed = parse_search_item(item)
 
-            tag = soup.select_one(selector)
+            if not parsed:
+                continue
 
-            if tag:
+            clean_url = parsed["url"].split("?")[0]
 
-                text = safe_text(tag)
+            if clean_url in seen_urls:
+                continue
 
-                if len(text) > 3:
+            seen_urls.add(clean_url)
 
-                    title = text
-                    break
+            results.append(parsed)
 
-        logger.info(f"TITLE FOUND: {title}")
+        logger.info(f"[Flipkart] Final results: {len(results)}")
 
-        # =================================================
-        # PRICE
-        # =================================================
+        return results
 
-        price = 0
+    except Exception as e:
+        logger.error(f"[Flipkart] ERROR: {e}")
+        return results
 
-        price_selectors = [
 
-            "div.Nx9bqj.CxhGGd",
-            "div.Nx9bqj",
-            "div._30jeq3",
-            "div._16Jk6d"
-        ]
+# ==================================================
+# SCRAPE DIRECT FLIPKART PRODUCT URL
+# ==================================================
+def scrape_flipkart_product(url):
+    try:
+        logger.info(f"[Flipkart] Opening Product URL: {url}")
 
-        for selector in price_selectors:
+        html = open_flipkart_page(url)
 
-            tag = soup.select_one(selector)
+        if not html:
+            return None
 
-            if tag:
+        if is_blocked(html):
+            logger.warning("[Flipkart] Product page blocked")
+            return None
 
-                price = clean_price(
-                    safe_text(tag)
-                )
+        soup = BeautifulSoup(html, "html.parser")
 
-                if price > 0:
-                    break
+        title_tag = (
+            soup.select_one("span.VU-ZEz")
+            or soup.select_one("span.B_NuCI")
+            or soup.select_one("h1 span")
+            or soup.select_one("h1")
+        )
 
-        logger.info(f"PRICE FOUND: {price}")
+        title = safe_text(title_tag) if title_tag else "N/A"
 
-        # =================================================
-        # IMAGE
-        # =================================================
+        price_tag = (
+            soup.select_one("div.Nx9bqj.CxhGGd")
+            or soup.select_one("div.Nx9bqj")
+            or soup.select_one("div._30jeq3._16Jk6d")
+            or soup.select_one("div._30jeq3")
+            or soup.select_one("div._16Jk6d")
+            or soup.select_one("div.CEmiEU")
+        )
 
-        image = ""
+        price = clean_price(safe_text(price_tag)) if price_tag else 0
 
-        image_selectors = [
+        if price <= 0:
+            price = first_valid_price_from_text(soup.get_text(" ", strip=True))
 
-            "img.DByuf4",
-            "img._396cs4",
-            "img"
-        ]
+        image_tag = (
+            soup.select_one("img.DByuf4")
+            or soup.select_one("img._396cs4")
+            or soup.select_one("img._53J4C-")
+            or soup.select_one("img")
+        )
 
-        for selector in image_selectors:
+        image = PLACEHOLDER_IMAGE
 
-            tag = soup.select_one(selector)
-
-            if tag:
-
-                image = (
-
-                    tag.get("src")
-                    or tag.get("data-src")
-                    or tag.get("srcset")
-                    or tag.get("data-srcset")
-                    or ""
-                )
-
-                image = clean_image(image)
-
-                if image:
-                    break
-
-        logger.info(f"IMAGE FOUND: {image}")
-
-        # =================================================
-        # RATING
-        # =================================================
+        if image_tag:
+            image = clean_image(
+                image_tag.get("src")
+                or image_tag.get("data-src")
+                or ""
+            )
 
         rating = 0.0
 
-        rating_selectors = [
-
-            "div.css-146c3p1",
+        for selector in [
             "div.XQDdHH",
-            "div._3LWZlK"
-        ]
-
-        for selector in rating_selectors:
+            "div._3LWZlK",
+            "div[class*='XQDdHH']",
+            "div[class*='_3LWZlK']"
+        ]:
 
             tag = soup.select_one(selector)
 
@@ -410,70 +448,35 @@ def scrape_flipkart_product(url):
                     safe_text(tag)
                 )
 
-                if 0 < rating <= 5:
+                if rating > 0:
                     break
 
-        # =================================================
-        # FALLBACK RATING SEARCH
-        # =================================================
-
-        if rating == 0.0:
-
-            possible_tags = soup.find_all(
-                ["div", "span"]
-            )
-
-            for tag in possible_tags:
-
-                text = safe_text(tag)
-
-                match = re.search(
-                    r"([0-5]\.?[0-9]?)",
-                    text
-                )
-
-                if match:
-
-                    value = float(match.group())
-
-                    if 0 < value <= 5:
-
-                        rating = value
-                        break
-
-        logger.info(f"RATING FOUND: {rating}")
-
-        # =================================================
-        # REVIEWS
-        # =================================================
 
         reviews = "0"
 
-        review_selectors = [
-
+        for selector in [
             "span.Wphh3N",
-            "span._2_R_DZ"
-        ]
-
-        for selector in review_selectors:
+            "span._2_R_DZ",
+            "span[class*='Wphh3N']",
+            "span[class*='_2_R_DZ']"
+        ]:
 
             tag = soup.select_one(selector)
 
             if tag:
 
-                reviews = safe_text(tag)
+                reviews = clean_reviews(
+                    safe_text(tag)
+                )
 
-                if reviews:
+                if reviews != "0":
                     break
 
-        logger.info(f"REVIEWS FOUND: {reviews}")
+        if title == "N/A" or price <= 0:
+            logger.warning("[Flipkart] Product scrape failed")
+            return None
 
-        # =================================================
-        # FINAL PRODUCT
-        # =================================================
-
-        product = {
-
+        return {
             "title": title,
             "price": price,
             "image": image,
@@ -483,228 +486,6 @@ def scrape_flipkart_product(url):
             "website": "Flipkart"
         }
 
-        logger.info(f"FLIPKART PRODUCT: {product}")
-
-        return product
-
     except Exception as e:
-
-        logger.error(f"Flipkart scrape failed: {e}")
-
-        return {
-
-            "title": "N/A",
-            "price": 0,
-            "image": "https://via.placeholder.com/300?text=No+Image",
-            "rating": 0.0,
-            "reviews": "0",
-            "url": url,
-            "website": "Flipkart"
-        }
-
-
-# =========================================================
-# SEARCH FLIPKART PRODUCTS
-# =========================================================
-
-def search_flipkart(query):
-
-    products = []
-
-    try:
-
-        logger.info(f"[Flipkart] Searching: {query}")
-
-        search_url = (
-            f"https://www.flipkart.com/search?q="
-            f"{quote_plus(query)}"
-        )
-
-        playwright, browser, page = create_page()
-
-        logger.info(f"[Flipkart] Opening Search URL: {search_url}")
-
-        page.goto(
-
-            search_url,
-            timeout=120000,
-            wait_until="domcontentloaded"
-        )
-
-        # =================================================
-        # HUMAN DELAY
-        # =================================================
-
-        time.sleep(random.uniform(8, 12))
-
-        # =================================================
-        # CLOSE LOGIN POPUP
-        # =================================================
-
-        try:
-
-            close_btn = page.locator("button._2KpZ6l._2doB4z")
-
-            if close_btn.count() > 0:
-
-                close_btn.first.click()
-
-                time.sleep(2)
-
-        except:
-            pass
-
-        # =================================================
-        # HUMAN ACTIVITY
-        # =================================================
-
-        page.mouse.move(300, 400)
-        time.sleep(1)
-
-        page.mouse.move(700, 500)
-        time.sleep(1)
-
-        page.mouse.wheel(0, 2500)
-        time.sleep(3)
-
-        page.mouse.wheel(0, 1500)
-        time.sleep(3)
-
-        html = page.content()
-
-        browser.close()
-        playwright.stop()
-
-        # =================================================
-        # CAPTCHA CHECK
-        # =================================================
-
-        if is_blocked(html):
-
-            logger.warning("[Flipkart] CAPTCHA BLOCKED")
-
-            return []
-
-        soup = BeautifulSoup(html, "html.parser")
-
-        containers = soup.select("div[data-id]")
-
-        logger.info(f"[Flipkart] Containers found: {len(containers)}")
-
-        for item in containers[:30]:
-
-            try:
-
-                title = "N/A"
-                price = 0
-                image = ""
-                rating = 0.0
-                reviews = "0"
-                url = ""
-
-                # =========================================
-                # TITLE
-                # =========================================
-
-                title_tag = (
-
-                    item.select_one("div.KzDlHZ")
-                    or item.select_one("a.WKTcLC")
-                    or item.select_one("div._4rR01T")
-                )
-
-                if title_tag:
-                    title = safe_text(title_tag)
-
-                # =========================================
-                # PRICE
-                # =========================================
-
-                price_tag = (
-
-                    item.select_one("div.Nx9bqj")
-                    or item.select_one("div._30jeq3")
-                )
-
-                if price_tag:
-                    price = clean_price(
-                        safe_text(price_tag)
-                    )
-
-                # =========================================
-                # IMAGE
-                # =========================================
-
-                image_tag = item.select_one("img")
-
-                if image_tag:
-
-                    image = (
-
-                        image_tag.get("src")
-                        or image_tag.get("data-src")
-                        or ""
-                    )
-
-                    image = clean_image(image)
-
-                # =========================================
-                # RATING
-                # =========================================
-
-                rating_tag = (
-
-                    item.select_one("div.XQDdHH")
-                    or item.select_one("div.css-146c3p1")
-                )
-
-                if rating_tag:
-
-                    rating = extract_rating(
-                        safe_text(rating_tag)
-                    )
-
-                # =========================================
-                # URL
-                # =========================================
-
-                link_tag = item.select_one("a")
-
-                if link_tag:
-
-                    href = link_tag.get("href", "")
-
-                    if href.startswith("/"):
-
-                        url = BASE_URL + href
-
-                # =========================================
-                # SAVE
-                # =========================================
-
-                if title != "N/A":
-
-                    products.append({
-
-                        "title": title,
-                        "price": price,
-                        "image": image,
-                        "rating": rating,
-                        "reviews": reviews,
-                        "url": url,
-                        "website": "Flipkart"
-                    })
-
-            except Exception as e:
-
-                logger.warning(f"[Flipkart] Product parse error: {e}")
-
-        logger.info(f"[Flipkart] Final products: {len(products)}")
-
-        return products
-
-    except Exception as e:
-
-        logger.error(f"[Flipkart] Search failed: {e}")
-
-        return []
+        logger.error(f"[Flipkart] Product scrape failed: {e}")
+        return None

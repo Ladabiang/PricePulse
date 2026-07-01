@@ -1,8 +1,3 @@
-# ==================================================
-# app/routes/admin.py
-# FINAL CLEAN + SAFE VERSION + ACTIVITY LOGGING
-# ==================================================
-
 from flask import (
     Blueprint,
     render_template,
@@ -164,7 +159,61 @@ def price_history():
 
     return render_template("admin/price_history.html", history=history)
 
+@admin_bp.route("/export-price-history")
+@login_required
+def export_price_history():
 
+    if not admin_required():
+        return redirect(url_for("web.dashboard"))
+
+    history = PriceHistory.query.order_by(
+        PriceHistory.checked_at.desc()
+    ).all()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    writer.writerow([
+        "ID",
+        "Product",
+        "Website",
+        "Old Price",
+        "New Price",
+        "Price Change",
+        "Change Percent",
+        "Date"
+    ])
+
+    for h in history:
+
+        product_name = "N/A"
+
+        if h.link and h.link.product:
+            product_name = h.link.product.title
+
+        writer.writerow([
+            h.id,
+            product_name,
+            h.link.website if h.link else "N/A",
+            h.old_price or "",
+            h.price,
+            h.price_change or 0,
+            h.change_percent or 0,
+            h.checked_at.strftime("%d-%m-%Y %H:%M") if h.checked_at else ""
+        ])
+
+    output.seek(0)
+
+    log_activity("Exported Price History CSV")
+
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={
+            "Content-Disposition":
+            "attachment; filename=price_history_export.csv"
+        }
+    )
 # ==================================================
 # ALERTS
 # ==================================================
@@ -177,7 +226,9 @@ def alerts():
 
     page = request.args.get("page", 1, type=int)
 
-    alert_data = Alert.query.order_by(Alert.id.desc()).paginate(
+    alert_data = TrackedProduct.query.order_by(
+        TrackedProduct.id.desc()
+    ).paginate(
         page=page,
         per_page=10,
         error_out=False
@@ -292,7 +343,32 @@ def delete_user(user_id):
 
     username = user.username
 
+    # Get all products owned by this user
+    user_products = Product.query.filter_by(user_id=user.id).all()
+
+    for product in user_products:
+
+        # Delete price history linked to this product
+        PriceHistory.query.filter_by(product_id=product.id).delete()
+
+        # Delete tracked products linked to this product
+        TrackedProduct.query.filter_by(product_id=product.id).delete()
+
+        # Delete alerts linked to this product if Alert has product_id
+        Alert.query.filter_by(product_id=product.id).delete()
+
+        # Delete product
+        db.session.delete(product)
+
+    # Delete remaining user tracked items
+    TrackedProduct.query.filter_by(user_id=user.id).delete()
+
+    # Delete remaining user alerts
+    Alert.query.filter_by(user_id=user.id).delete()
+
+    # Delete user
     db.session.delete(user)
+
     db.session.commit()
 
     log_activity(f"Deleted user {username}")

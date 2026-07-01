@@ -314,6 +314,8 @@ def load_page(url, retries=3):
 
                     headless=HEADLESS,
 
+                    slow_mo=300,
+
                     channel="chrome",
 
                     args=[
@@ -377,7 +379,7 @@ def load_page(url, retries=3):
 
                     wait_until="domcontentloaded",
 
-                    timeout=120000
+                    timeout=60000
                 )
 
                 # =================================================
@@ -403,7 +405,7 @@ def load_page(url, retries=3):
                         random.uniform(1, 2)
                     )
 
-                page.wait_for_timeout(3000)
+                page.wait_for_timeout(2000)
 
                 html = page.content()
 
@@ -647,7 +649,7 @@ def search_amazon(keyword):
             f"TOTAL PRODUCTS: {len(results)}"
         )
 
-        save_to_sqlite(results)
+        #save_to_sqlite(results)
 
         save_json(results)
 
@@ -834,7 +836,86 @@ def scrape_product(url):
 
                 if reviews > 0:
                     break
+        
+        # =================================================
+        # AMAZON PRICE FALLBACK
+        # =================================================
+        if price <= 0:
 
+            page_text = soup.get_text(" ", strip=True)
+
+            price_matches = re.findall(
+                r"₹\s?[\d,]+(?:\.\d{1,2})?",
+                page_text
+            )
+
+            for match in price_matches:
+
+                extracted = clean_price(match)
+
+                # avoid EMI / coupon tiny prices
+                if extracted >= 100:
+
+                    price = extracted
+
+                    logger.info(
+                        f"PRICE FOUND BY FALLBACK: {price}"
+                    )
+
+                    break
+
+        # =================================================
+        # CUSTOMER REVIEWS
+        # =================================================
+        customer_reviews = []
+
+        review_blocks = soup.select("[data-hook='review']")
+
+        for review in review_blocks[:5]:
+
+            try:
+
+                reviewer = review.select_one(".a-profile-name")
+                reviewer = safe_text(reviewer) if reviewer else "Anonymous"
+
+                rating = review.select_one(
+                    "[data-hook='review-star-rating']"
+                )
+
+                if not rating:
+                    rating = review.select_one(
+                        "[data-hook='cmps-review-star-rating']"
+                    )
+
+                rating = safe_text(rating) if rating else "No Rating"
+
+                title = review.select_one(
+                    "[data-hook='review-title']"
+                )
+
+                title = safe_text(title) if title else ""
+
+                body = review.select_one(
+                    "[data-hook='review-body']"
+                )
+
+                body = safe_text(body) if body else ""
+
+                customer_reviews.append({
+
+                    "reviewer": reviewer,
+
+                    "rating": rating,
+
+                    "title": title,
+
+                    "body": body
+
+                })
+
+            except Exception as e:
+
+                logger.error(f"REVIEW ERROR: {e}")
         # =================================================
         # VALIDATION
         # =================================================
@@ -851,6 +932,8 @@ def scrape_product(url):
             "title": title,
 
             "price": price,
+
+            "customer_reviews": customer_reviews,
 
             "image": image or "https://via.placeholder.com/300",
 

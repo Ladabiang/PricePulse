@@ -200,17 +200,16 @@ View Deal
 <button class="btn-outline">Track</button>
 </form>
 
-<!-- 🔥 PRICE HISTORY FIX -->
 {% if product.id %}
 <a href="/price-history/{{ product.id }}" class="btn-outline">
-📊 Price History
+ Price History
 </a>
 {% else %}
 <!-- fallback for scraped items -->
 <form action="/temp-history" method="POST">
 <input type="hidden" name="title" value="{{ product.title }}">
 <input type="hidden" name="price" value="{{ product.price_clean }}">
-<button class="btn-outline">📊 Price History</button>
+<button class="btn-outline"> Price History</button>
 </form>
 {% endif %}
 

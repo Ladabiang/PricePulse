@@ -1,7 +1,3 @@
-# ==================================================
-# app/services/scraper_service.py
-# ==================================================
-
 from app.scrapers.base_scraper import (
     search_all_sites,
     scrape_from_url

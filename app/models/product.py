@@ -65,7 +65,6 @@ class Product(db.Model):
 
     # ==================================================
     # TRACKED PRODUCTS
-    # FIXED BACKREF CONFLICT
     # ==================================================
     tracked_items = db.relationship(
         "TrackedProduct",

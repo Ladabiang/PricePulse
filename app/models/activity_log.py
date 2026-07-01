@@ -1,7 +1,3 @@
-# =====================================================
-# File: app/models/activity_log.py
-# =====================================================
-
 from datetime import datetime, timezone
 from app.extensions import db
 

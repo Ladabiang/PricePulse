@@ -1,7 +1,3 @@
-# =====================================================
-# File: app/models/price_history.py
-# =====================================================
-
 from datetime import datetime, timezone
 from app.extensions import db
 

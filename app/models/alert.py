@@ -53,9 +53,6 @@ class Alert(db.Model):
     user = db.relationship("User", backref="alerts")
     product = db.relationship("Product", backref="alerts")
 
-    # ==================================================
-    # 🔥 CORE LOGIC FUNCTION (ADD HERE)
-    # ==================================================
     def check_trigger(self, current_price):
         """
         Checks if alert should be triggered based on current price.

@@ -448,14 +448,9 @@ body{
                     </a>
                 </li>
 
-                <li><hr class="dropdown-divider"></li>
-
-                <li>
-                    <a class="dropdown-item text-danger"
-                       href="{{ url_for('auth.logout') }}">
-                        Logout
-                    </a>
-                </li>
+                 <a href="{{ url_for('auth.logout') }}" class="logout-btn text-decoration-none">
+                            Logout
+                </a>
 
             </ul>
 
@@ -537,7 +532,7 @@ body{
 <!-- ================= SIDEBAR ================= -->
 <div class="sidebar">
 
-    <div class="logo">⚡ PricePulse</div>
+    <div class="logo"> PricePulse</div>
 
     <a href="{{ url_for('admin.admin_dashboard') }}">
         <i class="bi bi-grid me-2"></i> Dashboard

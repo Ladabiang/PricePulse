@@ -4,114 +4,251 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PricePulse | Saved Items</title>
+<title>PricePulse | Saved Products</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-
-/* ================= GLOBAL ================= */
 body{
-    font-family: Arial, sans-serif;
-    background:#e3e6e6;
+    font-family:Arial,sans-serif;
+    background:#f3f4f6;
     margin:0;
+    color:#111827;
 }
 
-/* ================= NAVBAR ================= */
 .navbar{
     background:#081120;
-    padding:14px 20px;
-    color:#fff;
+    padding:16px 28px;
 }
 
 .brand{
-    font-size:26px;
+    font-size:30px;
     font-weight:800;
     color:#fff;
     text-decoration:none;
 }
-.brand span{ color:#38bdf8; }
 
-/* ================= PAGE ================= */
+.brand span{
+    color:#38bdf8;
+}
+
+.logout-btn{
+    margin-left:12px;
+    padding:8px 14px;
+    border-radius:10px;
+
+    border:1px solid #38bdf8;
+    color:#38bdf8;
+    background:transparent;
+
+    font-weight:600;
+    transition: all 0.25s ease;
+}
+
+.logout-btn:hover{
+    background:#38bdf8;
+    color:#081120;
+}
+
+
+.nav-link-custom{
+    color:#e5e7eb;
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:600;
+}
+
+.nav-link-custom:hover,
+.nav-link-custom.active{
+    color:#38bdf8;
+}
+
 .page-container{
-    padding:30px;
+    padding:35px 25px;
+}
+
+.header-card{
+    background:#fff;
+    border-radius:22px;
+    padding:28px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.06);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
 .page-title{
-    font-size:26px;
+    font-size:30px;
     font-weight:800;
 }
 
 .sub-title{
-    color:#6b7280;
-    font-size:14px;
+    color:#64748b;
+    margin-top:5px;
 }
 
-/* ================= GRID ================= */
-.saved-grid{
-    margin-top:25px;
-}
-
-/* ================= CARD ================= */
-.saved-card{
-    background:#fff;
-    border-radius:16px;
-    border:1px solid #ddd;
-    box-shadow:0 4px 12px rgba(0,0,0,0.06);
-    overflow:hidden;
-    transition:0.2s;
-}
-
-.saved-card:hover{
-    transform:translateY(-5px);
-    border-color:#38bdf8;
-}
-
-/* ================= IMAGE ================= */
-.saved-card img{
-    width:100%;
-    height:180px;
-    object-fit:cover;
-}
-
-/* ================= BODY ================= */
-.saved-body{
-    padding:15px;
-}
-
-.price{
-    font-size:18px;
+.count-badge{
+    background:#e0f2fe;
+    color:#0284c7;
+    padding:10px 18px;
+    border-radius:999px;
     font-weight:800;
 }
 
-/* ================= BUTTON ================= */
+.saved-grid{
+    margin-top:30px;
+}
+
+.saved-card{
+    background:#fff;
+    border-radius:22px;
+    overflow:hidden;
+    border:1px solid #e5e7eb;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+    transition:0.25s ease;
+    height:100%;
+}
+
+.saved-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 20px 45px rgba(0,0,0,0.12);
+    border-color:#38bdf8;
+}
+
+.image-box{
+    background:#f9fafb;
+    padding:18px;
+}
+
+.image-box img{
+    width:100%;
+    height:210px;
+    object-fit:contain;
+}
+
+.saved-body{
+    padding:18px;
+}
+
+.product-title{
+    font-size:15px;
+    font-weight:800;
+    line-height:1.5;
+    min-height:68px;
+}
+
+.site-badge{
+    display:inline-block;
+    background:#111827;
+    color:#fff;
+    padding:5px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    margin-top:8px;
+}
+
+.price{
+    font-size:24px;
+    font-weight:900;
+    margin-top:12px;
+}
+
+.status{
+    font-size:13px;
+    font-weight:700;
+    margin-top:6px;
+}
+
+.action-area{
+    margin-top:16px;
+    display:grid;
+    gap:9px;
+}
+
+.btn-view{
+    background:#111827;
+    color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:10px;
+    text-align:center;
+    text-decoration:none;
+    font-weight:800;
+}
+
+.btn-view:hover{
+    background:#1f2937;
+    color:#fff;
+}
+
 .btn-track{
     background:#38bdf8;
-    border:none;
     color:#fff;
+    border:none;
+    border-radius:12px;
+    padding:10px;
     width:100%;
-    padding:8px;
-    border-radius:10px;
-    font-weight:700;
+    font-weight:800;
 }
 
 .btn-track:hover{
     background:#0ea5e9;
 }
 
-/* ================= EMPTY ================= */
-.empty{
-    text-align:center;
-    padding:60px 20px;
+.btn-remove{
+    background:#fff;
+    color:#ef4444;
+    border:1px solid #ef4444;
+    border-radius:12px;
+    padding:10px;
+    width:100%;
+    font-weight:800;
 }
 
+.btn-remove:hover{
+    background:#ef4444;
+    color:#fff;
+}
+
+.empty{
+    margin-top:35px;
+    background:#fff;
+    border-radius:24px;
+    padding:80px 25px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.06);
+}
+
+.empty i{
+    font-size:52px;
+    color:#38bdf8;
+}
+
+@media(max-width:768px){
+    .header-card{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .navbar{
+        flex-direction:column;
+        align-items:flex-start !important;
+        gap:12px;
+    }
+
+    .nav-link-custom{
+        margin-left:0;
+        margin-right:14px;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
 <div class="navbar d-flex justify-content-between align-items-center">
 
     <a href="{{ url_for('web.dashboard') }}" class="brand">
@@ -119,94 +256,127 @@ body{
     </a>
 
     <div>
-        <a href="{{ url_for('web.dashboard') }}" class="text-white me-3">Dashboard</a>
-        <a href="{{ url_for('web.history') }}" class="text-white me-3">History</a>
-        <a href="{{ url_for('web.alerts') }}" class="text-white me-3">Alerts</a>
-        <a href="{{ url_for('web.saved') }}" class="text-white me-3 fw-bold">Saved</a>
+        <a href="{{ url_for('web.dashboard') }}" class="nav-link-custom">Dashboard</a>
+        <a href="{{ url_for('web.history') }}" class="nav-link-custom">History</a>
+        <a href="{{ url_for('web.alerts') }}" class="nav-link-custom">Alerts</a>
+        <a href="{{ url_for('web.saved') }}" class="nav-link-custom active">Saved</a>
     </div>
+
+    <a href="{{ url_for('auth.logout') }}"
+       class="logout-btn text-decoration-none">
+        Logout
+    </a>
 
 </div>
 
-<!-- ================= PAGE ================= -->
 <div class="container page-container">
 
-    <!-- HEADER -->
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="header-card">
 
         <div>
-            <div class="page-title">Saved Items</div>
-            <div class="sub-title">Your wishlist & bookmarked products</div>
+            <div class="page-title">
+                Saved Products
+            </div>
+
+            <div class="sub-title">
+                Products you bookmarked for later tracking
+            </div>
         </div>
 
-        <span class="badge bg-primary">
-            {{ saved_items|length }} Items
-        </span>
+        <div class="count-badge">
+            {{ items|length }} Saved
+        </div>
 
     </div>
 
-    <!-- EMPTY -->
-    {% if saved_items|length == 0 %}
+    {% if items|length == 0 %}
 
-        <div class="empty">
-            <h5>No saved items yet</h5>
-            <p class="text-muted">Save products from dashboard to see them here</p>
+    <div class="empty">
+        <i class="bi bi-heart"></i>
+        <h4 class="mt-3">No saved products yet</h4>
+        <p class="text-muted">Save products from search results and track them later.</p>
 
-            <a href="{{ url_for('web.dashboard') }}" class="btn btn-primary">
-                Browse Products
-            </a>
-        </div>
+        <a href="{{ url_for('web.dashboard') }}" class="btn btn-primary mt-2">
+            Back to Dashboard
+        </a>
+    </div>
 
     {% else %}
 
-    <!-- GRID -->
     <div class="row saved-grid g-4">
 
-        {% for item in saved_items %}
+        {% for item in items %}
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-6">
 
             <div class="saved-card">
 
-                <img src="{{ item.image if item.image else 'https://via.placeholder.com/300' }}">
+                <div class="image-box">
+                    <img src="{{ item.image or 'https://via.placeholder.com/300?text=No+Image' }}"
+                         alt="Product Image">
+                </div>
 
                 <div class="saved-body">
 
-                    <h6>{{ item.product_name }}</h6>
-
-                    <div class="text-muted small">
-                        {{ item.website }}
+                    <div class="product-title">
+                        {{ item.product_name }}
                     </div>
 
-                    <div class="price mt-2">
+                    <span class="site-badge">
+                        {{ item.website }}
+                    </span>
+
+                    <div class="price">
                         ₹{{ item.price }}
                     </div>
 
-                    {% if item.price_drop %}
-                        <small class="text-success">
-                            🔻 Price dropped recently
-                        </small>
+                    {% if item.is_active %}
+                        <div class="status text-success">
+                            <i class="bi bi-check-circle"></i>
+                            Currently Tracking
+                        </div>
                     {% else %}
-                        <small class="text-warning">
-                            ⏳ Waiting for price drop
-                        </small>
+                        <div class="status text-warning">
+                            <i class="bi bi-bookmark-heart"></i>
+                            Saved for Later
+                        </div>
                     {% endif %}
 
-                    <div class="mt-3">
+                    <div class="action-area">
 
-                        <a href="{{ item.product_url }}" target="_blank"
-                           class="btn btn-outline-dark btn-sm w-100 mb-2">
+                        <a href="{{ item.product_url }}"
+                           target="_blank"
+                           class="btn-view">
+
+                            <i class="bi bi-box-arrow-up-right"></i>
                             View Product
+
                         </a>
 
-                        <form method="POST" action="/track-product">
+                        <form method="POST"
+                              action="{{ url_for('web.track_product_route') }}">
+
                             <input type="hidden" name="name" value="{{ item.product_name }}">
                             <input type="hidden" name="price" value="{{ item.price }}">
                             <input type="hidden" name="website" value="{{ item.website }}">
                             <input type="hidden" name="url" value="{{ item.product_url }}">
+                            <input type="hidden" name="image" value="{{ item.image }}">
 
                             <button type="submit" class="btn-track">
+                                <i class="bi bi-graph-up-arrow"></i>
                                 Track Now
                             </button>
+
+                        </form>
+
+                        <form method="POST"
+                              action="{{ url_for('web.remove_saved', tracked_id=item.id) }}">
+
+                            <button type="submit" class="btn-remove">
+                                <i class="bi bi-trash"></i>
+                                Remove
+                            </button>
+
                         </form>
 
                     </div>
@@ -225,8 +395,9 @@ body{
 
 </div>
 
-<!-- ================= FOOTER ================= -->
 {% include "components/footer.html" %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

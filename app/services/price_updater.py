@@ -1,8 +1,3 @@
-# ==================================================
-# File: app/services/price_updater.py
-# Background Price Tracker + Email Alert
-# ==================================================
-
 from datetime import datetime, timezone
 
 from app.extensions import db
@@ -34,6 +29,10 @@ def update_all_prices():
         return
 
     for item in tracked_items:
+        # Skip inactive tracking
+        if not item.is_active:
+            print("Tracking stopped. Skipping.")
+            continue
 
         try:
             print(f"Checking: {item.product_name}")
@@ -55,8 +54,27 @@ def update_all_prices():
             print("OLD PRICE:", old_price)
             print("NEW PRICE:", new_price)
 
+            if old_price > 0:
+
+                difference = round(old_price - new_price, 2)
+
+                print("PRICE DIFFERENCE:", difference)
+
+                if new_price < old_price:
+                    print("PRICE DROPPED!")
+
+                elif new_price > old_price:
+                    print("PRICE INCREASED!")
+
+                else:
+                    print("PRICE UNCHANGED")
+
             if new_price <= 0:
-                print("Invalid price. Skipping.")
+
+                print("Invalid scraped price.")
+                print("Possible scraping failure.")
+                print("Skipping update.\n")
+
                 continue
 
             # ================= FIND PRODUCT =================
@@ -135,41 +153,49 @@ def update_all_prices():
             )
 
             db.session.add(history)
-
             # ==================================================
-            # EMAIL ALERT CONDITIONS
+            # EMAIL ALERT ONLY WHEN PRICE DROPS
             # ==================================================
             should_send_email = False
 
-            # Case 1: price decreased compared to old price
             if old_price > 0 and new_price < old_price:
+
                 should_send_email = True
+
                 print("PRICE DROP DETECTED!")
 
-            # Case 2: target price reached
-            if item.target_price and new_price <= item.target_price:
-                should_send_email = True
-                print("TARGET PRICE REACHED!")
-
-            # Prevent repeated target emails
+            # Prevent repeated price drop emails
             if should_send_email and not item.alert_sent:
 
                 user = db.session.get(User, item.user_id)
 
                 if user:
-                    send_price_drop_email(
-                        user.email,
-                        item.product_name,
-                        old_price,
-                        new_price,
-                        item.product_url
-                    )
+                    email_sent = send_price_drop_email(
+                    user.email,
+                    item.product_name,
+                    old_price,
+                    new_price,
+                    item.product_url
+                )
 
+                if email_sent:
                     item.alert_sent = True
                     item.last_alert_sent = datetime.now(timezone.utc)
 
-                    print("EMAIL SENT TO:", user.email)
+                    print("\n========== EMAIL ALERT SENT ==========")
+                    print("USER:", user.email)
+                    print("PRODUCT:", item.product_name)
+                    print("OLD PRICE:", old_price)
+                    print("NEW PRICE:", new_price)
+                    print("TARGET:", item.target_price)
+                    print("=====================================\n")
 
+                else:
+                    print("\n========== EMAIL ALERT FAILED ==========")
+                    print("USER:", user.email)
+                    print("PRODUCT:", item.product_name)
+                    print("alert_sent remains False")
+                    print("=======================================\n")
             db.session.commit()
 
             print("Updated successfully.\n")

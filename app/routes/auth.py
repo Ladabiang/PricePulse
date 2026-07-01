@@ -1,8 +1,3 @@
-# ==================================================
-# app/routes/auth.py
-# FINAL PROFESSIONAL VERSION WITH ACTIVITY LOGGING
-# ==================================================
-
 from flask import (
     Blueprint,
     request,

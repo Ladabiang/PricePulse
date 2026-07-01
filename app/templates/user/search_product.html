@@ -100,32 +100,74 @@ body{
     font-weight:600;
 }
 
+.logout-btn{
+    margin-left:12px;
+    padding:8px 14px;
+    border-radius:10px;
+
+    border:1px solid #38bdf8;
+    color:#38bdf8;
+    background:transparent;
+
+    font-weight:600;
+    transition: all 0.25s ease;
+}
+
+.logout-btn:hover{
+    background:#38bdf8;
+    color:#081120;
+}
+
+.nav-link-custom{
+    color:#e5e7eb !important;
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:600;
+    transition:0.25s ease;
+}
+
+.nav-link-custom:hover{
+    color:#38bdf8 !important;
+}
+
+.nav-link-custom.active{
+    color:#38bdf8 !important;
+}
+
 /* ================= MAIN WRAPPER ================= */
 .wrapper{
     display:flex;
-    min-height:100vh;
+    min-height:calc(100vh - 80px);
+    align-items:flex-start;
 }
 
 /* ================= SIDEBAR ================= */
 .sidebar{
-    width:280px;
-    background:#fff;
-    padding:22px;
-    border-right:1px solid #ddd;
+    width:300px;
+    background:#ffffff;
+    padding:24px;
+    border-right:1px solid #e5e7eb;
     position:sticky;
     top:80px;
     height:calc(100vh - 80px);
+    overflow-y:auto;
 }
 
 .sidebar h5{
     font-size:22px;
     font-weight:800;
-    margin-bottom:20px;
+    margin-bottom:22px;
+    color:#0f172a;
+}
+
+.filter-section{
+    margin-bottom:18px;
 }
 
 .filter-label{
-    font-size:14px;
-    font-weight:600;
+    font-size:13px;
+    font-weight:700;
+    color:#334155;
     margin-bottom:8px;
     display:block;
 }
@@ -133,22 +175,31 @@ body{
 .sidebar input,
 .sidebar select{
     width:100%;
-    padding:12px;
-    border-radius:10px;
+    padding:13px 14px;
+    border-radius:12px;
     border:1px solid #d1d5db;
-    margin-bottom:16px;
+    background:#f8fafc;
+    margin-bottom:0;
     outline:none;
+    font-size:14px;
+}
+
+.sidebar input:focus,
+.sidebar select:focus{
+    border-color:#38bdf8;
+    background:#fff;
+    box-shadow:0 0 0 3px rgba(56,189,248,.18);
 }
 
 .filter-btn{
     width:100%;
     border:none;
-    padding:12px;
-    border-radius:12px;
+    padding:14px;
+    border-radius:14px;
     background:#38bdf8;
     color:#fff;
-    font-weight:700;
-    transition:0.2s;
+    font-weight:800;
+    margin-top:8px;
 }
 
 .filter-btn:hover{
@@ -249,43 +300,73 @@ body{
 
 /* ================= ACTIONS ================= */
 .actions{
-    display:flex;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
     gap:10px;
     margin-top:18px;
+    align-items:center;
 }
 
+/* ================= TRACK ================= */
 .track{
-    flex:1;
+    width:100%;
     border:none;
     border-radius:12px;
     padding:12px;
     background:#38bdf8;
     color:#fff;
-    font-weight:700;
-    transition:0.2s;
+    font-weight:800;
+    text-align:center;
+    transition:0.25s ease;
+    box-shadow:0 4px 12px rgba(56,189,248,.25);
 }
 
 .track:hover{
     background:#0ea5e9;
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(14,165,233,.35);
 }
 
+/* ================= SAVE ================= */
+.save{
+    width:100%;
+    border-radius:12px;
+    padding:12px;
+    background:#fff;
+    color:#ef4444;
+    border:1px solid #ef4444;
+    font-weight:800;
+    text-align:center;
+    transition:0.25s ease;
+}
+
+.save:hover{
+    background:#ef4444;
+    color:#fff;
+    transform:translateY(-2px);
+}
+
+/* ================= VIEW ================= */
 .view{
-    flex:1;
+    width:100%;
     border-radius:12px;
     padding:12px;
     background:#111827;
     color:#fff;
     text-decoration:none;
     text-align:center;
-    font-weight:700;
-    transition:0.2s;
+    font-weight:800;
+    transition:0.25s ease;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 .view:hover{
     background:#1f2937;
     color:#fff;
+    transform:translateY(-2px);
 }
-
 /* ================= FULL PRODUCT VIEW ================= */
 .single-product{
     max-width:1200px;
@@ -404,6 +485,64 @@ body{
         height:320px;
     }
 }
+.rating-row{
+    margin-top:10px;
+    font-size:14px;
+    font-weight:700;
+    color:#f59e0b;
+}
+
+.review-row{
+    font-size:13px;
+    color:#64748b;
+    margin-top:4px;
+}
+
+.customer-reviews{
+    margin-top:35px;
+}
+
+.review-box{
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    padding:14px;
+    margin-top:12px;
+}
+
+.review-user{
+    font-weight:700;
+    font-size:14px;
+}
+
+.review-rating{
+    color:#f59e0b;
+    font-size:13px;
+    margin-top:4px;
+}
+
+.review-title{
+    font-weight:700;
+    margin-top:6px;
+    font-size:14px;
+}
+
+.review-body{
+    color:#64748b;
+    font-size:13px;
+    margin-top:6px;
+    line-height:1.5;
+}
+.save{
+    flex:1;
+    border:none;
+    border-radius:12px;
+    padding:12px;
+    background:#fff;
+    color:#ef4444;
+    border:1px solid #ef4444;
+    font-weight:700;
+}
 
 </style>
 </head>
@@ -468,15 +607,11 @@ body{
                     Saved
                 </a>
             </li>
+            <a href="{{ url_for('auth.logout') }}" class="logout-btn text-decoration-none">
+                            Logout
+            </a>
 
-            <li><hr class="dropdown-divider"></li>
-
-            <li>
-                <a class="dropdown-item text-danger"
-                   href="{{ url_for('web.logout') }}">
-                    Logout
-                </a>
-            </li>
+            
 
         </ul>
 
@@ -488,31 +623,169 @@ body{
 <!-- ================= MAIN ================= -->
 <div class="wrapper">
 
-<!-- ================= SIDEBAR ================= -->
-<div class="sidebar">
+    <!-- ================= SIDEBAR ================= -->
+    <div class="sidebar">
 
-    <h5>Filters</h5>
+        <form method="GET"
+              action="{{ url_for('web.shop') }}">
 
-    <label class="filter-label">Minimum Price</label>
-    <input type="number" placeholder="₹ Min Price">
+            <!-- KEEP CURRENT SEARCH -->
+            <input type="hidden"
+                   name="q"
+                   value="{{ query or '' }}">
 
-    <label class="filter-label">Maximum Price</label>
-    <input type="number" placeholder="₹ Max Price">
+            <input type="hidden"
+                   name="category"
+                   value="{{ category or '' }}">
 
-    <label class="filter-label">Marketplace</label>
-    <select>
-        <option>All Sites</option>
-        <option>Amazon</option>
-        <option>Flipkart</option>
-        <option>Snapdeal</option>
-    </select>
+            <input type="hidden"
+                   name="sub"
+                   value="{{ sub or '' }}">
 
-    <button class="filter-btn">
-        Apply Filters
-    </button>
+            <h5>
+                <i class="bi bi-funnel"></i>
+                Filters
+            </h5>
 
-</div>
+            <!-- MARKETPLACE -->
+            <div class="filter-section">
+                <label class="filter-label">Marketplace</label>
 
+                <select name="marketplace">
+                    <option value="">All Sites</option>
+
+                    <option value="Amazon" {% if marketplace == "Amazon" %}selected{% endif %}>
+                        Amazon
+                    </option>
+
+                    <option value="Flipkart" {% if marketplace == "Flipkart" %}selected{% endif %}>
+                        Flipkart
+                    </option>
+
+                    <option value="Snapdeal" {% if marketplace == "Snapdeal" %}selected{% endif %}>
+                        Snapdeal
+                    </option>
+
+                    <option value="ShopClues" {% if marketplace == "ShopClues" %}selected{% endif %}>
+                        ShopClues
+                    </option>
+                </select>
+            </div>
+
+            <!-- MIN PRICE -->
+            <div class="filter-section">
+                <label class="filter-label">Minimum Price</label>
+
+                <input type="number"
+                       name="min"
+                       value="{{ min_price or '' }}"
+                       placeholder="₹ Min Price">
+            </div>
+
+            <!-- MAX PRICE -->
+            <div class="filter-section">
+                <label class="filter-label">Maximum Price</label>
+
+                <input type="number"
+                       name="max"
+                       value="{{ max_price or '' }}"
+                       placeholder="₹ Max Price">
+            </div>
+
+            <!-- RATING -->
+            <div class="filter-section">
+                <label class="filter-label">Minimum Rating</label>
+
+                <select name="rating">
+                    <option value="">Any Rating</option>
+
+                    <option value="4" {% if rating == "4" %}selected{% endif %}>
+                        4★ & Above
+                    </option>
+
+                    <option value="3" {% if rating == "3" %}selected{% endif %}>
+                        3★ & Above
+                    </option>
+                </select>
+            </div>
+
+            <!-- DISCOUNT -->
+            <div class="filter-section">
+                <label class="filter-label">Discount</label>
+
+                <select name="discount">
+                    <option value="">Any Discount</option>
+
+                    <option value="10" {% if discount == "10" %}selected{% endif %}>
+                        10%+
+                    </option>
+
+                    <option value="20" {% if discount == "20" %}selected{% endif %}>
+                        20%+
+                    </option>
+
+                    <option value="30" {% if discount == "30" %}selected{% endif %}>
+                        30%+
+                    </option>
+                </select>
+            </div>
+
+            <!-- SORT -->
+            <div class="filter-section">
+                <label class="filter-label">Sort By</label>
+
+                <select name="sort_by">
+                    <option value="">Best Match</option>
+
+                    <option value="low_price" {% if sort_by == "low_price" %}selected{% endif %}>
+                        Lowest Price
+                    </option>
+
+                    <option value="high_price" {% if sort_by == "high_price" %}selected{% endif %}>
+                        Highest Price
+                    </option>
+
+                    <option value="rating" {% if sort_by == "rating" %}selected{% endif %}>
+                        Highest Rating
+                    </option>
+                </select>
+            </div>
+
+            <!-- AI -->
+            <div class="filter-section">
+                <label class="filter-label">AI Recommendation</label>
+
+                <select name="ai_filter">
+                    <option value="">All Products</option>
+
+                    <option value="buy" {% if ai_filter == "buy" %}selected{% endif %}>
+                        Buy Now
+                    </option>
+
+                    <option value="wait" {% if ai_filter == "wait" %}selected{% endif %}>
+                        Wait For Price Drop
+                    </option>
+
+                    <option value="stable" {% if ai_filter == "stable" %}selected{% endif %}>
+                        Stable Price
+                    </option>
+                </select>
+            </div>
+
+            <!-- APPLY -->
+            <button type="submit"
+                    class="filter-btn">
+
+                <i class="bi bi-funnel-fill"></i>
+                Apply Filters
+
+            </button>
+
+        </form>
+
+    </div>
+
+    
 <!-- ================= CONTENT ================= -->
 <div class="content">
 
@@ -564,28 +837,60 @@ body{
             <div class="old mt-2">
                 ₹{{ (results[0].price or 0) * 1.1 }}
             </div>
+            <div class="rating-row">
+                ⭐ {{ results[0].rating if results[0].rating else "No rating" }}
+            </div>
+
+            <div class="review-row">
+                {{ results[0].reviews if results[0].reviews else "0" }} reviews
+            </div>
+
+            {% if p.ai_recommendation == "buy" %}
+
+            <span class="badge bg-success">
+                AI Says: Buy Now
+            </span>
+
+            {% elif p.ai_recommendation == "wait" %}
+
+            <span class="badge bg-warning text-dark">
+                AI Says: Wait
+            </span>
+
+            {% else %}
+
+            <span class="badge bg-secondary">
+                AI Says: Stable
+            </span>
+
+            {% endif %}
 
             <div class="single-actions">
 
+                <!-- TRACK -->
                 <form method="POST"
-                      action="{{ url_for('web.track_product_route') }}"
-                      style="flex:1;">
+                    action="{{ url_for('web.track_product_route') }}"
+                    style="flex:1;">
 
                     <input type="hidden"
-                           name="name"
-                           value="{{ results[0].title }}">
+                        name="name"
+                        value="{{ results[0].title }}">
 
                     <input type="hidden"
-                           name="price"
-                           value="{{ results[0].price }}">
+                        name="price"
+                        value="{{ results[0].price }}">
 
                     <input type="hidden"
-                           name="website"
-                           value="{{ results[0].website }}">
+                        name="website"
+                        value="{{ results[0].website }}">
 
                     <input type="hidden"
-                           name="url"
-                           value="{{ results[0].url }}">
+                        name="url"
+                        value="{{ results[0].url }}">
+
+                    <input type="hidden"
+                        name="image"
+                        value="{{ results[0].image }}">
 
                     <button class="track w-100" type="submit">
                         Track Product
@@ -593,9 +898,41 @@ body{
 
                 </form>
 
+                <!-- SAVE -->
+                <form method="POST"
+                    action="{{ url_for('web.save_product_route') }}"
+                    style="flex:1;">
+
+                    <input type="hidden"
+                        name="name"
+                        value="{{ results[0].title }}">
+
+                    <input type="hidden"
+                        name="price"
+                        value="{{ results[0].price }}">
+
+                    <input type="hidden"
+                        name="website"
+                        value="{{ results[0].website }}">
+
+                    <input type="hidden"
+                        name="url"
+                        value="{{ results[0].url }}">
+
+                    <input type="hidden"
+                        name="image"
+                        value="{{ results[0].image }}">
+
+                    <button class="save w-100" type="submit">
+                        ♥ Save
+                    </button>
+
+                </form>
+
+                <!-- VIEW -->
                 <a href="{{ results[0].url }}"
-                   target="_blank"
-                   class="view">
+                target="_blank"
+                class="view">
 
                     View Product
 
@@ -603,11 +940,61 @@ body{
 
             </div>
 
+
         </div>
 
     </div>
 
 </div>
+
+<!-- CUSTOMER REVIEWS -->
+
+{% if results[0].customer_reviews %}
+
+<div class="customer-reviews">
+
+    
+    <a href="{{ results[0].review_url }}"
+        target="_blank"
+        class="btn btn-sm btn-outline-primary mb-3">
+
+            View Real Amazon Reviews
+
+    </a>
+
+    {% for review in results[0].customer_reviews[:5] %}
+
+    <div class="review-box">
+
+        <div class="review-user">
+            {{ review.reviewer }}
+        </div>
+
+        <div class="review-rating">
+            ⭐ {{ review.rating }}
+        </div>
+
+        <div class="review-title">
+            {{ review.title }}
+        </div>
+
+        {% if review.body and review.body != "No review text available" %}
+            <div class="review-body">
+                {{ review.body[:250] }}...
+            </div>
+        {% else %}
+            <div class="review-body">
+                Review text is hidden by Amazon. Open the real review page below.
+            </div>
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
 
 {% else %}
 
@@ -640,29 +1027,61 @@ body{
     <div class="old">
         ₹{{ (p.price or 0) * 1.1 }}
     </div>
+    <div class="rating-row">
+        ⭐ {{ p.rating if p.rating else "No rating" }}
+    </div>
+
+    <div class="review-row">
+        {{ p.reviews if p.reviews else "0" }} reviews
+    </div>
+
+    {% if p.ai_recommendation == "buy" %}
+
+    <span class="badge bg-success">
+        AI Says: Buy Now
+    </span>
+
+    {% elif p.ai_recommendation == "wait" %}
+
+    <span class="badge bg-warning text-dark">
+        AI Says: Wait
+    </span>
+
+    {% else %}
+
+    <span class="badge bg-secondary">
+        AI Says: Stable
+    </span>
+
+    {% endif %}
 
     <!-- ACTIONS -->
     <div class="actions">
 
+        <!-- TRACK -->
         <form method="POST"
-              action="{{ url_for('web.track_product_route') }}"
-              style="flex:1;">
+            action="{{ url_for('web.track_product_route') }}"
+            style="flex:1;">
 
             <input type="hidden"
-                   name="name"
-                   value="{{ p.title }}">
+                name="name"
+                value="{{ p.title }}">
 
             <input type="hidden"
-                   name="price"
-                   value="{{ p.price }}">
+                name="price"
+                value="{{ p.price }}">
 
             <input type="hidden"
-                   name="website"
-                   value="{{ p.website }}">
+                name="website"
+                value="{{ p.website }}">
 
             <input type="hidden"
-                   name="url"
-                   value="{{ p.url }}">
+                name="url"
+                value="{{ p.url }}">
+
+            <input type="hidden"
+                name="image"
+                value="{{ p.image }}">
 
             <button class="track" type="submit">
                 Track
@@ -670,9 +1089,41 @@ body{
 
         </form>
 
+        <!-- SAVE -->
+        <form method="POST"
+            action="{{ url_for('web.save_product_route') }}"
+            style="flex:1;">
+
+            <input type="hidden"
+                name="name"
+                value="{{ p.title }}">
+
+            <input type="hidden"
+                name="price"
+                value="{{ p.price }}">
+
+            <input type="hidden"
+                name="website"
+                value="{{ p.website }}">
+
+            <input type="hidden"
+                name="url"
+                value="{{ p.url }}">
+
+            <input type="hidden"
+                name="image"
+                value="{{ p.image }}">
+
+            <button class="save" type="submit">
+                ♥ Save
+            </button>
+
+        </form>
+
+        <!-- VIEW -->
         <a href="{{ p.url }}"
-           target="_blank"
-           class="view">
+        target="_blank"
+        class="view">
 
             View
 

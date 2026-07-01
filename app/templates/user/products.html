@@ -42,6 +42,24 @@ body{
     color:#4f46e5;
 }
 
+.logout-btn{
+    margin-left:12px;
+    padding:8px 14px;
+    border-radius:10px;
+
+    border:1px solid #4f46e5;
+    color:#4f46e5;
+    background:transparent;
+
+    font-weight:600;
+    transition: all 0.25s ease;
+}
+
+.logout-btn:hover{
+    background:#4f46e5;
+    color:#fff;
+}
+
 /* Hero */
 .hero{
     background:linear-gradient(135deg,#4f46e5,#7c3aed);
@@ -258,11 +276,19 @@ else if ("{{ category }}" === "admin") {
             PricePulse
         </span>
 
-        <div>
+        <div class="d-flex align-items-center gap-2">
+
             <a href="/dashboard" class="btn btn-outline-primary rounded-pill px-4">
                 Dashboard
             </a>
+
+            <a href="{{ url_for('auth.logout') }}"
+            class="logout-btn text-decoration-none">
+                Logout
+            </a>
+
         </div>
+        
 
     </div>
 </nav>

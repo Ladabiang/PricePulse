@@ -1,10 +1,8 @@
-# ==================================================
-# app/scheduler.py
-# FINAL FIXED VERSION
-# ==================================================
-
 from apscheduler.schedulers.background import BackgroundScheduler
 
+# ==================================================
+# CREATE GLOBAL SCHEDULER
+# ==================================================
 scheduler = BackgroundScheduler()
 
 
@@ -13,14 +11,26 @@ scheduler = BackgroundScheduler()
 # ==================================================
 def start_scheduler(app):
 
-    # prevent duplicate scheduler
-    if not scheduler.running:
+    # ==============================================
+    # PREVENT DUPLICATE SCHEDULERS
+    # ==============================================
+    if scheduler.running:
 
-        # ==================================================
-        # WRAPPER FUNCTION
-        # THIS FIXES APP CONTEXT ERROR
-        # ==================================================
-        def scheduled_price_update():
+        print("Scheduler already running")
+
+        return
+
+    # ==============================================
+    # MAIN BACKGROUND TASK
+    # ==============================================
+    def scheduled_price_update():
+
+        print("\n===================================")
+        print("SCHEDULER RUNNING NOW")
+        print("Checking tracked products...")
+        print("===================================\n")
+
+        try:
 
             with app.app_context():
 
@@ -30,21 +40,43 @@ def start_scheduler(app):
 
                 update_all_prices()
 
-        # ==================================================
-        # ADD JOB
-        # ==================================================
-        scheduler.add_job(
-            func=scheduled_price_update,
+            print("\n===================================")
+            print("SCHEDULER FINISHED SUCCESSFULLY")
+            print("===================================\n")
 
-            trigger="interval",
+        except Exception as e:
 
-            minutes=30,   # testing mode
+            print("\n===================================")
+            print(f"SCHEDULER ERROR: {e}")
+            print("===================================\n")
 
-            id="price_tracker_job",
+    # ==============================================
+    # ADD BACKGROUND JOB
+    # ==============================================
+    scheduler.add_job(
 
-            replace_existing=True
-        )
+        func=scheduled_price_update,
 
-        scheduler.start()
+        trigger="interval",
 
-        print("Background price tracker started")
+        # ==========================================
+        # TEST MODE
+        # CHANGE TO 30 LATER
+        # ==========================================
+        minutes=30,
+
+        id="price_tracker_job",
+
+        replace_existing=True
+
+    )
+
+    # ==============================================
+    # START SCHEDULER
+    # ==============================================
+    scheduler.start()
+
+    print("\n===================================")
+    print("BACKGROUND PRICE TRACKER STARTED")
+    print("Scheduler interval: 30 minute")
+    print("===================================\n")

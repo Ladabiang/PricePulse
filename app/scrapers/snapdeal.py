@@ -1,6 +1,7 @@
 import logging
 import re
 import time
+import random
 from urllib.parse import quote_plus
 
 from bs4 import BeautifulSoup
@@ -68,7 +69,7 @@ def clean_title(text):
 
 
 # ==================================================
-# ⭐ RATING + REVIEWS (NEW FIX)
+#  RATING + REVIEWS 
 # ==================================================
 def extract_rating_reviews(item):
 
@@ -153,6 +154,7 @@ def search_snapdeal(product):
 
             browser = p.chromium.launch(
                 headless=True,
+                slow_mo=300,
                 args=["--no-sandbox"]
             )
 
@@ -165,21 +167,49 @@ def search_snapdeal(product):
                 )
             )
 
+            context.add_init_script("""
+
+                Object.defineProperty(navigator, 'webdriver', {
+                get: () => undefined
+            });
+
+            window.chrome = {
+                runtime: {}
+            };
+
+            Object.defineProperty(navigator, 'plugins', {
+                get: () => [1,2,3,4,5]
+            });
+
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['en-US', 'en']
+            });
+
+            """)
+
             page = context.new_page()
-            page.goto(url, wait_until="domcontentloaded", timeout=60000)
+            page.set_default_timeout(8000)
+            page.goto(
+                url,
+                wait_until="commit",
+                timeout=15000
+            )
 
-            time.sleep(5)
+            page.wait_for_timeout(1500)
 
-            for _ in range(4):
-                page.mouse.wheel(0, 3500)
-                time.sleep(1.5)
+            page.mouse.wheel(0, 1800)
+            page.wait_for_timeout(1000)
 
             html = page.content()
             browser.close()
 
+        print(html[:2000])
         soup = BeautifulSoup(html, "html.parser")
 
+
         items = soup.select("div.product-tuple-listing")
+        if not items:
+            items = soup.select("div.product-tuple-description")
 
         if not items:
             logger.warning("[Snapdeal] No products found")
@@ -203,7 +233,7 @@ def search_snapdeal(product):
                 img_tag = item.select_one("img")
                 image = extract_image(img_tag)
 
-                # ⭐ NEW: rating + reviews
+                # NEW: rating + reviews
                 rating, reviews = extract_rating_reviews(item)
 
                 if not title or price <= 0:
